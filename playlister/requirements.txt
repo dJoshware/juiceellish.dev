@@ -85,8 +85,6 @@ pylint-celery==0.3
 pylint-django==2.5.3
 pylint-flask==0.6
 pylint-plugin-utils==0.7
-pyobjc==9.0.1
-pyobjc-core==9.0.1
 pyobjc-framework-Accessibility==9.0.1
 pyobjc-framework-Accounts==9.0.1
 pyobjc-framework-AddressBook==9.0.1
