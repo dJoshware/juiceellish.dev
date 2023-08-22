@@ -13,7 +13,9 @@ def home():
     return render_template('index.html')
 
 
-
+@app.route('/playlister_index')
+def playlister_index():
+    return render_template('playlister/index.html')
 
 
 if __name__ == "__main__":
