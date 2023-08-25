@@ -1,4 +1,4 @@
-#!/Users/juiceellish/Full-Stack-Development/juiceellish.dev/playlister/venv/bin/python3
+#!/Users/juiceellish/Full-Stack-Development/juiceellish.dev/web-apps/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
