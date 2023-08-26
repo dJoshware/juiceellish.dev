@@ -30,5 +30,5 @@ sqlparse==0.4.3
 twilio==7.16.3
 urllib3==1.26.12
 virtualenv==20.23.0
-Werkzeug==2.2.3
+Werkzeug==2.3.7
 WTForms==3.0.1
