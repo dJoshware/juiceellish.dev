@@ -21,6 +21,7 @@ def home():
 
 
 @app.route('/playlister_index')
+@cache.cached(timeout=60)
 def playlister_index():
     return render_template('playlister/index.html')
 
