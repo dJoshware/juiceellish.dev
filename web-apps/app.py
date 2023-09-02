@@ -1,8 +1,12 @@
-import os
+import os, requests
+
 from dotenv import load_dotenv
-# from playlister.helpers import login
+from playlister.helpers import generate_random_string
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_caching import Cache
+from spotipy import Spotify
+from spotipy.oauth2 import SpotifyOAuth
+
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +24,17 @@ app.config.from_mapping(config)
 app.secret_key = os.getenv('SECRET_KEY')
 cache = Cache(app)
 
+OAUTH_AUTHORIZE_URL= 'https://accounts.spotify.com/authorize'
+OAUTH_TOKEN_URL= 'https://accounts.spotify.com/api/token'
+
+
+oauth = SpotifyOAuth(client_id=os.getenv('SPOTIFY_CLIENT_ID'),
+                     client_secret=os.getenv('SPOTIFY_CLIENT_SECRET'),redirect_uri=os.getenv('REDIRECT_URI'), state=generate_random_string(16), scope="user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public")
+
+sp = Spotify(auth_manager=oauth)
+
+
+
 
 # Home route / juiceellish.dev landing page
 @app.route('/')
@@ -33,17 +48,19 @@ def home():
 
 
 # Playlister app landing page
-@app.route('/playlister_index', methods=['GET', 'POST'])
+@app.route('/playlister/index')
 @cache.cached(timeout=60)
 def playlister_index():
+    # result = sp.current_user_playlists(limit=5)
+    result = sp.current_user()
+    print(result)
 
-    # If user submits Spotify login form
-        # Log user in to their Spotify account
-    # Get all existing playlists: style them in card form
+    # Get all existing playlists: style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
     # Create 'Edit Playlist', 'Delete Playlist' and 'Create New Playlist' buttons on the form page
+    # Username and PFP top right page, logout button
+        # Logout: logout of Spotify and 
 
-
-    return render_template('playlister/index.html')
+    return render_template('playlister/index.html', profile=result)
 
 
 if __name__ == "__main__":
