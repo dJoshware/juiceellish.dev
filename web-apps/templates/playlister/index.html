@@ -8,14 +8,13 @@
     <h1>Display your Spotify profile data</h1>
 
     <section id="profile">
-        <h2>Logged in as <span id="displayName">{{ profile['display_name'] }}</span></h2>
+        <h2>Logged in as <span id="displayName">{{ user['display_name'] }}</span></h2>
         <span id="avatar"></span>
         <ul>
-            <li>User ID: <span id="id">{{ profile['id'] }}</span></li>
-            <li>Email: <span id="email">{{ profile['email'] }}</span></li>
-            <li>Spotify URI: <a href="{{ profile['uri'] }}" id="url">My Spotify Profile</a></li>
-            <li>Profile Image 1: <span id="imgUrl"><img src="{{ profile['images'][0]['url'] }}" alt="Profile Image 1"></span></li>
-            <li>Profile Image 2: <span id="imgUrl"><img src="{{ profile['images'][1]['url'] }}" alt="Profile Image 2"></span></li>
+            {% for playlist in playlist['items'] %}
+                <li>{{ playlist['name'] }}</li>
+                <img src="{{ playlist['images'][0]['url'] }}" height="200" width="200">
+            {% endfor %}
         </ul>
     </section>
 {% endblock %}

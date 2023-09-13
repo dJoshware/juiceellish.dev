@@ -51,16 +51,17 @@ def home():
 @app.route('/playlister/index')
 @cache.cached(timeout=60)
 def playlister_index():
-    # result = sp.current_user_playlists(limit=5)
-    result = sp.current_user()
-    print(result)
+    playlist = sp.current_user_playlists(limit=5)
+    user = sp.current_user()
+    
+    print(playlist)
 
     # Get all existing playlists: style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
     # Create 'Edit Playlist', 'Delete Playlist' and 'Create New Playlist' buttons on the form page
     # Username and PFP top right page, logout button
         # Logout: logout of Spotify and 
 
-    return render_template('playlister/index.html', profile=result)
+    return render_template('playlister/index.html', playlist=playlist, user=user)
 
 
 if __name__ == "__main__":
