@@ -51,17 +51,65 @@ def home():
 @app.route('/playlister/index')
 @cache.cached(timeout=60)
 def playlister_index():
-    playlist = sp.current_user_playlists(limit=5)
+    # Get user profile information to display username
     user = sp.current_user()
-    
-    print(playlist)
+    username = user['display_name']
 
-    # Get all existing playlists: style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
+    # Get user playlists
+    playlists = sp.current_user_playlists()
+        # style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
+    
     # Create 'Edit Playlist', 'Delete Playlist' and 'Create New Playlist' buttons on the form page
     # Username and PFP top right page, logout button
         # Logout: logout of Spotify and 
 
-    return render_template('playlister/index.html', playlist=playlist, user=user)
+    return render_template('playlister/index.html', playlists=playlists, username=username)
+
+
+@app.route('/playlister/<playlist>')
+def playlister_playlist(playlist):
+    # Get user profile information to display username
+    user = sp.current_user()
+    username = user['display_name']
+
+    # Get user playlists
+    playlists = sp.current_user_playlists()
+    # print(playlists)
+
+    # Loop over playlists to get cover image, name, description, and id
+    for item in playlists['items']:
+        # Get playlist user clicked
+        if item['name'] == playlist:
+            image = item['images'][0]['url']
+            description = item['description']
+            id = item['id']
+
+            # Get tracks of selected playlist
+            tracks = sp.playlist_items(id)
+            for track in tracks['items']:
+
+                # print(track['track'])
+
+                # ARTIST NAME
+                # print(track['track']['album']['artists'][0]['name'])
+
+                # ALBUM NAME OF TRACK
+                # print(track['track']['album']['name'])
+
+                # ALBUM IMAGES
+                # print(track['track']['album']['images'][0]['url'])
+                # print(track['track']['album']['images'][1]['url'])
+                # print(track['track']['album']['images'][2]['url'])
+
+                # TRACK NAME
+                # print(track['track']['name'])
+
+                print()
+
+            # tracks_url = item['tracks']['href']
+
+
+    return render_template('playlister/playlist.html', name=playlist, username=username, image=image, description=description)
 
 
 if __name__ == "__main__":

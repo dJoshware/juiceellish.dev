@@ -1,0 +1,18 @@
+{% extends "playlister/layout.html" %}
+
+{% block title %}
+    Playlists - Playlister
+{% endblock %}
+
+{% block main %}
+    <section id="profile">
+        <h2>Logged in as <span id="displayName">{{ username }}</span></h2>
+        <span id="avatar"></span>
+        <ul>
+            <li><img src="{{ image }}" alt="Playlist Cover Image" height="400" width="400"></li>
+            <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
+            <li>{{ name }}</li>
+            <li>{{ description }}</li>
+        </ul>
+    </section>
+{% endblock %}

@@ -1,19 +1,20 @@
 {% extends "playlister/layout.html" %}
 
 {% block title %}
-    juiceellish
+    Home - Playlister
 {% endblock %}
 
 {% block main %}
     <h1>Display your Spotify profile data</h1>
 
     <section id="profile">
-        <h2>Logged in as <span id="displayName">{{ user['display_name'] }}</span></h2>
+        <h2>Logged in as <span id="displayName">{{ username }}</span></h2>
         <span id="avatar"></span>
         <ul>
-            {% for playlist in playlist['items'] %}
+            {% for playlist in playlists['items'] %}
                 <li>{{ playlist['name'] }}</li>
-                <img src="{{ playlist['images'][0]['url'] }}" height="200" width="200">
+                <a href="{{ url_for('playlister_playlist', playlist=playlist['name']) }}"><img src="{{ playlist['images'][0]['url'] }}" height="300" width="300"></a>
+                <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
             {% endfor %}
         </ul>
     </section>
