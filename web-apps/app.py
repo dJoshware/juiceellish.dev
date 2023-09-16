@@ -74,42 +74,55 @@ def playlister_playlist(playlist):
 
     # Get user playlists
     playlists = sp.current_user_playlists()
-    # print(playlists)
 
     # Loop over playlists to get cover image, name, description, and id
     for item in playlists['items']:
-        # Get playlist user clicked
+        # Get playlist info that the user selected
         if item['name'] == playlist:
             image = item['images'][0]['url']
             description = item['description']
             id = item['id']
 
-            # Get tracks of selected playlist
-            tracks = sp.playlist_items(id)
-            for track in tracks['items']:
+            # Empty list to append song names to
+            all_tracks = []
+            offset = 0
 
-                # print(track['track'])
+            # Loop over playlist items to generate list of all the playlist's songs
+            while True:
+                track_group = sp.playlist_tracks(id, offset=offset)
+                tracks = track_group['items']
 
-                # ARTIST NAME
-                # print(track['track']['album']['artists'][0]['name'])
+                if not tracks:
+                    break # No more tracks to retrieve
 
-                # ALBUM NAME OF TRACK
-                # print(track['track']['album']['name'])
+                for track in tracks:
+                    # Extract track name and append to empty list
+                    track_name = track['track']['name']
+                    all_tracks.append(track_name)
 
-                # ALBUM IMAGES
-                # print(track['track']['album']['images'][0]['url'])
-                # print(track['track']['album']['images'][1]['url'])
-                # print(track['track']['album']['images'][2]['url'])
+                # Update offset by 100 for next iteration
+                offset += len(tracks)
+        
+            print(f'Track total: {len(all_tracks)}')
+            if len(all_tracks) > 0:
+                print(all_tracks)
 
-                # TRACK NAME
-                # print(track['track']['name'])
+            # ARTIST NAME
+            # print(track['track']['album']['artists'][0]['name'])
 
-                print()
+            # ALBUM NAME OF TRACK
+            # print(track['track']['album']['name'])
 
-            # tracks_url = item['tracks']['href']
+            # ALBUM IMAGES
+            # print(track['track']['album']['images'][0]['url'])
+            # print(track['track']['album']['images'][1]['url'])
+            # print(track['track']['album']['images'][2]['url'])
+
+            # TRACK NAME
+            # tracks = track['track']['name']
 
 
-    return render_template('playlister/playlist.html', name=playlist, username=username, image=image, description=description)
+    return render_template('playlister/playlist.html', name=playlist, username=username, image=image, description=description, all_tracks=all_tracks)
 
 
 if __name__ == "__main__":

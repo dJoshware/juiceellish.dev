@@ -13,6 +13,11 @@
             <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
             <li>{{ name }}</li>
             <li>{{ description }}</li>
+            <ul>
+                {% for track in all_tracks: %}
+                    <li>{{ track }}</li>
+                {% endfor %}
+            </ul>
         </ul>
     </section>
 {% endblock %}
