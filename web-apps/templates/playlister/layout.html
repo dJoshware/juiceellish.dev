@@ -26,13 +26,46 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='playlister/styles.css') }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='playlister/images/4390.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='playlister/images/playlister_logo.svg') }}">
 
     <title>{% block title %}{% endblock %}</title>
 </head>
-
+ 
 <body>
-    {% block main %}{% endblock %}
+
+    <nav class="bg-dark navbar navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a href="/playlister/index" class="navbar-brand">
+                <img src="{{ url_for('static', filename='playlister/images/playlister_word.svg') }}" alt="Playlister Logo" height="200">
+            </a>
+            <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav me-auto mt-2">
+                    <li class="nav-item"><a class="nav-link" href="/playlister/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if get_flashed_messages() %}
+    <header>
+        <div class="alert alert-primary mb-0 text-center" role="alert">
+            {{ get_flashed_messages() | join(" ") }}
+        </div>
+    </header>
+    {% endif %}
+
+    <main class="container-fluid py-5">
+        {% block main %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container-fluid mb-5" id="footer">
+            2023 &copy; juiceellish, LLC - Temporary footer
+        </div>
+    </footer>
 </body>
 
 </html>

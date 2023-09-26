@@ -5,11 +5,9 @@
 {% endblock %}
 
 {% block main %}
-    <h1>Display your Spotify profile data</h1>
-
     <section id="profile">
-        <h2>Logged in as <span id="displayName">{{ username }}</span></h2>
-        <span id="avatar"></span>
+        <h2><span id="displayName">{{ username }}</span></h2>
+        <span id="avatar"><img src="{{ sm_image }}" alt="Your Profile Picture"></span>
         <ul>
             {% for playlist in playlists['items'] %}
                 <li>{{ playlist['name'] }}</li>
