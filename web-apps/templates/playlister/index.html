@@ -5,15 +5,19 @@
 {% endblock %}
 
 {% block main %}
-    <section id="profile">
-        <h2><span id="displayName">{{ username }}</span></h2>
-        <span id="avatar"><img src="{{ sm_image }}" alt="Your Profile Picture"></span>
-        <ul>
+    <section>
+        <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
             {% for playlist in playlists['items'] %}
-                <li>{{ playlist['name'] }}</li>
-                <a href="{{ url_for('playlister_playlist', playlist=playlist['name']) }}"><img src="{{ playlist['images'][0]['url'] }}" height="300" width="300"></a>
-                <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
+            <div class="col mb-5">
+                <div class="card h-100 bg-transparent" id="card">
+                    <a href="{{ url_for('playlister_playlist', playlist=playlist['name']) }}"><img src="{{ playlist['images'][0]['url'] }}" height="300" width="300"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ playlist['name'] }}</h5>
+                    </div>
+                    <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
+                </div>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
     </section>
 {% endblock %}

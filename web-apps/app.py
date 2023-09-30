@@ -28,8 +28,8 @@ cache = Cache(app)
 # Session(app)
 
 # Constants
-OAUTH_AUTHORIZE_URL= 'https://accounts.spotify.com/authorize?'
-OAUTH_TOKEN_URL= 'https://accounts.spotify.com/api/token'
+OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize?'
+# OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
@@ -58,7 +58,7 @@ oauth = SpotifyOAuth(
 sp = Spotify(auth_manager=oauth)
 
 
-
+# PORTFOLIO ROUTES
 
 # Home route / juiceellish.dev landing page
 @app.route('/')
@@ -72,32 +72,6 @@ def home():
 
 
 # ----- PLAYLISTER ROUTES -----
-
-# Login page
-@app.route('/playlister/login', methods=['GET', 'POST'])
-def login():
-    ''' Log user in. '''
-    if request.method == 'POST':
-        params['show_dialog'] # Working on login functionality
-        encoded_params = urllib.parse.urlencode(params)
-
-        return redirect(OAUTH_AUTHORIZE_URL + encoded_params)
-    return render_template('playlister/login.html')
-
-
-# Logout functionality; redirect to login page
-@app.route('/playlister/logout', methods=['GET', 'POST'])
-def logout():
-    ''' Log user out. '''
-    params['show_dialog'] = False
-    encoded_params = urllib.parse.urlencode(params)
-    response = requests.get(OAUTH_AUTHORIZE_URL + encoded_params)
-    if request.method == 'POST':
-        # "Log In" button - id='login-button'
-        return 
-    # return redirect('/playlister/login')
-    return response.text
-
 
 # Landing page
 @app.route('/playlister/index')
@@ -163,10 +137,6 @@ def playlister_playlist(playlist):
 
                 # Update offset by 100 for next iteration
                 offset += len(tracks)
-        
-            # print(f'Track total: {len(all_track_names)}')
-            # if len(all_track_names) > 0:
-            #     print(all_track_names)
 
             # ARTIST NAME
             # print(track['track']['album']['artists'][0]['name'])
