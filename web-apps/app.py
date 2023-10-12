@@ -64,6 +64,7 @@ sp = Spotify(auth_manager=oauth)
 @app.route('/')
 def home():
     ''' Landing page for 'juiceellish.dev'. '''
+    
     # Setup as portfolio
     # Describe backend of the site, showcase applications at top (as cards: image, title, and description), explain languages used and any respective packages/modules, hosting service(s)
     # Create backstory/personal background section
@@ -78,6 +79,7 @@ def home():
 @cache.cached()
 def playlister_index():
     ''' Playlister app landing page. '''
+
     # Get user profile information to display username
     user = sp.current_user()
     print(user)
@@ -87,25 +89,25 @@ def playlister_index():
 
     # PFPs
     sm_image = user['images'][0]['url']
-    lg_image = user['images'][1]['url']
+    # lg_image = user['images'][1]['url']
 
     # Get user playlists
     playlists = sp.current_user_playlists()
         # style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
     
-    # Create 'Edit Playlist', 'Delete Playlist' and 'Create New Playlist' buttons on the form page
-    # Username and PFP top right page, logout button
-        # Logout: logout of Spotify and 
+    # IF NO PLAYLIST COVER IMAGE EXISTS, INSERT TEMP
 
-    return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image, lg_image=lg_image)
+    return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
 
 # Playlists page
 @app.route('/playlister/<playlist>')
 def playlister_playlist(playlist):
     ''' Takes a playlist the user selects and renders it on its own page. '''
+
     # Get user profile information to display username
     user = sp.current_user()
     username = user['display_name']
+    sm_image = user['images'][0]['url']
 
     # Get user playlists
     playlists = sp.current_user_playlists()
@@ -153,8 +155,52 @@ def playlister_playlist(playlist):
             # tracks = track['track']['name']
 
 
-    return render_template('playlister/playlist.html', name=playlist, username=username, image=image, description=description, all_track_names=all_track_names)
+    return render_template('playlister/playlist.html', name=playlist, username=username, sm_image=sm_image, image=image, description=description, all_track_names=all_track_names)
 
+# Delete playlist
+@app.route('/playlister/delete_playlist')
+def delete_playlist():
+    ''' Delete a playlist from a user's profile. '''
+
+    # Test functionality
+    print('DELETED')
+
+    return redirect('/playlister/index')
+
+
+# Create playlist
+@app.route('/playlister/create_playlist', methods=['GET', 'POST'])
+def create_playlist():
+    ''' Create new playlist to save to user profile. '''
+
+    # Get user profile information to display username
+    user = sp.current_user()
+    username = user['display_name']
+    sm_image = user['images'][0]['url']
+
+    # Spotipy parameters for creating playlists
+    public_param = True
+    collab_param = False
+
+    if request.method == 'POST':
+        playlist_name = request.form.get('playlist_name')
+        description = request.form.get('playlist_desc')
+        # pfp = request.form.get('playlist_img')
+        public = request.form.get('public')
+        collaborative = request.form.get('collaborative')
+
+        # Check if user unselected Public
+        if public == None:
+            public_param = False
+        # Check if user selected Collaborative
+        if collaborative == 'on':
+            collab_param = True
+
+        sp.user_playlist_create(user=user['id'], name=playlist_name, public=public_param, collaborative=collab_param, description=description)
+
+        return redirect('/playlister/index')
+
+    return render_template('playlister/create_playlist.html', username=username, sm_image=sm_image)
 
 
 if __name__ == "__main__":

@@ -4,22 +4,52 @@
     margin: 0;
     padding: 0;
 }
+:root {
+    --bg-color: #212529;
+    --logo-blue: #54E1FA;
+    --text-color: #F8F9FA;
+}
 body {
-    background-color: #212529;
-    color: #F8F9FA;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: 'bryant', sans-serif;
     font-weight: 400;
     height: 100%;
     letter-spacing: .08rem;
 }
-.container-fluid {
-    padding-top: 12px;
-}
 #pfp {
     border-radius: 50%;
     margin-right: .5rem;
+    margin-bottom: 1rem;
+}
+.btn-outline-info {
+    border-color: var(--logo-blue);
+    color: var(--text-color);
+}
+.btn-outline-info:hover {
+    background-color: var(--logo-blue);
+    color: var(--bg-color);
+}
+.my-hr {
+    border-top: 2px solid var(--logo-blue);
+    border-radius: 5px;
+    opacity: 1;
+}
+.col {
+    padding: 0;
+}
+.form-width {
+    color: var(--bg-color);
+    width: 18.75rem;
 }
 #card {
-    border-color: #54E1FA;
-    color: #F8F9FA;
+    border: none;
+    color: var(--text-color);
+    outline: none;
+}
+#card .card-title {
+    margin: 0;
+}
+#songs {
+    text-align: left;
 }

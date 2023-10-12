@@ -5,16 +5,22 @@
 {% endblock %}
 
 {% block main %}
+    <section id="create_playlist_btn">
+        <div class="container-fluid">
+            <a class="btn btn-outline-info" href="{{ url_for('create_playlist') }}">Create Playlist</a>
+        </div>
+    </section>
+    <hr class="my-hr my-4">
     <section>
         <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
             {% for playlist in playlists['items'] %}
-            <div class="col mb-5">
+            <div class="col">
                 <div class="card h-100 bg-transparent" id="card">
                     <a href="{{ url_for('playlister_playlist', playlist=playlist['name']) }}"><img src="{{ playlist['images'][0]['url'] }}" height="300" width="300"></a>
-                    <div class="card-body">
+                    <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
+                    <div class="card-body mb-5">
                         <h5 class="card-title">{{ playlist['name'] }}</h5>
                     </div>
-                    <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
                 </div>
             </div>
             {% endfor %}

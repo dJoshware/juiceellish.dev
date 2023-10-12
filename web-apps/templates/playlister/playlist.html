@@ -6,16 +6,27 @@
 
 {% block main %}
     <section>
-        <ul>
-            <li><img src="{{ image }}" alt="Playlist Cover Image" height="400" width="400"></li>
-            <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
-            <li>{{ name }}</li>
-            <li>{{ description }}</li>
-            <ul>
-                {% for track in all_track_names: %}
+        <div class="container-fluid d-flex flex-column align-items-center">
+            <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
+                <img src="{{ image }}" alt="Playlist Cover Image" height="400" width="400">
+                <div class="d-flex w-25">
+                    <a href="#" class="btn btn-outline-info flex-fill m-3">Edit</a>
+                    <a href="{{ url_for('delete_playlist') }}" class="btn btn-outline-danger flex-fill m-3">Delete</a>
+                </div>
+                <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
+                <h3 class="mb-3">{{ name }}</h3>
+                <h5 class="mb-3">{{ description }}</h5>
+            </div>
+            <div class="w-100">
+                <hr class="my-hr">
+            </div>
+            <div class="d-flex w-25">
+                <ol id="songs">
+                    {% for track in all_track_names: %}
                     <li>{{ track }}</li>
-                {% endfor %}
-            </ul>
-        </ul>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
     </section>
 {% endblock %}
