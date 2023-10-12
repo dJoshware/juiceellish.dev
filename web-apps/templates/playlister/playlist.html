@@ -8,10 +8,14 @@
     <section>
         <div class="container-fluid d-flex flex-column align-items-center">
             <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
-                <img src="{{ image }}" alt="Playlist Cover Image" height="400" width="400">
+                {% if has_image == False %}
+                    <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
+                {% else %}
+                    <img src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
+                {% endif %}
                 <div class="d-flex w-25">
                     <a href="#" class="btn btn-outline-info flex-fill m-3">Edit</a>
-                    <a href="{{ url_for('delete_playlist') }}" class="btn btn-outline-danger flex-fill m-3">Delete</a>
+                    <a href="{{ url_for('delete_playlist', id=id) }}" class="btn btn-outline-danger flex-fill m-3">Delete</a>
                 </div>
                 <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
                 <h3 class="mb-3">{{ name }}</h3>

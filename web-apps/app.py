@@ -76,13 +76,12 @@ def home():
 
 # Landing page
 @app.route('/playlister/index')
-@cache.cached()
+# @cache.cached()
 def playlister_index():
     ''' Playlister app landing page. '''
 
     # Get user profile information to display username
     user = sp.current_user()
-    print(user)
 
     # Username
     username = user['display_name']
@@ -93,15 +92,12 @@ def playlister_index():
 
     # Get user playlists
     playlists = sp.current_user_playlists()
-        # style them in card form, 250px by 250px; stack vertically, title, description, edit & delete buttons
-    
-    # IF NO PLAYLIST COVER IMAGE EXISTS, INSERT TEMP
 
     return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
 
 # Playlists page
-@app.route('/playlister/<playlist>')
-def playlister_playlist(playlist):
+@app.route('/playlister/<playlist>:<id>')
+def playlister_playlist(playlist, id):
     ''' Takes a playlist the user selects and renders it on its own page. '''
 
     # Get user profile information to display username
@@ -112,13 +108,21 @@ def playlister_playlist(playlist):
     # Get user playlists
     playlists = sp.current_user_playlists()
 
+    # Flag for playlist cover check
+    has_image = True
+
     # Loop over playlists to get cover image, name, description, and id
     for item in playlists['items']:
         # Get playlist info that the user selected
         if item['name'] == playlist:
-            image = item['images'][0]['url']
+            # If playlist doesn't have cover image, use default
+            if not item['images']:
+                has_image = False
+                image = None # Needs value to avoid UnboundLocalError
+            else:
+                image = item['images'][0]['url']
+            
             description = item['description']
-            id = item['id']
 
             # Empty list to append song names to
             all_track_names = []
@@ -155,15 +159,37 @@ def playlister_playlist(playlist):
             # tracks = track['track']['name']
 
 
-    return render_template('playlister/playlist.html', name=playlist, username=username, sm_image=sm_image, image=image, description=description, all_track_names=all_track_names)
+    return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_track_names=all_track_names)
 
 # Delete playlist
-@app.route('/playlister/delete_playlist')
-def delete_playlist():
+@app.route('/playlister/delete_playlist/<id>')
+def delete_playlist(id):
     ''' Delete a playlist from a user's profile. '''
 
     # Test functionality
-    print('DELETED')
+    playlist = sp.playlist(id)
+    for item in playlist['tracks']['items']:
+        print(item)
+    '''
+    FIX:
+        PRINT ALL PLAYLIST ITEMS; CUTS OFF AT 100
+        GET LIST OF TRACK URIS
+        EXAMPLE:
+        {
+            "tracks": [
+                {
+                    "uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
+                },
+                {
+                    "uri": "spotify:track:1301WleyT98MSxVHPZCA6M"
+                }
+            ]
+        }
+    '''
+    # print(playlist['tracks']['items'][1])
+
+    # sp.playlist_remove_all_occurrences_of_items(playlist_id=id)
+    print(f'Playlist {id} DELETED')
 
     return redirect('/playlister/index')
 

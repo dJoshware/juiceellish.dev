@@ -16,7 +16,13 @@
             {% for playlist in playlists['items'] %}
             <div class="col">
                 <div class="card h-100 bg-transparent" id="card">
-                    <a href="{{ url_for('playlister_playlist', playlist=playlist['name']) }}"><img src="{{ playlist['images'][0]['url'] }}" height="300" width="300"></a>
+                    <a href="{{ url_for('playlister_playlist', playlist=playlist['name'], id=playlist['id']) }}">
+                        {% if not playlist['images'] %}
+                            <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Playlist Cover Image" height="300" width="300">
+                        {% else %}
+                            <img src="{{ playlist['images'][0]['url'] }}" alt="Cover Image: {{ playlist['name'] }}" height="300" width="300">
+                        {% endif %}
+                    </a>
                     <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
                     <div class="card-body mb-5">
                         <h5 class="card-title">{{ playlist['name'] }}</h5>
