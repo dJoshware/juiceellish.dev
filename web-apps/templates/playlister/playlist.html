@@ -18,19 +18,33 @@
                     <a href="{{ url_for('delete_playlist', id=id) }}" class="btn btn-outline-danger flex-fill m-3">Delete</a>
                 </div>
                 <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
-                <h3 class="mb-3">{{ name }}</h3>
-                <h5 class="mb-3">{{ description }}</h5>
+                {% if track_total == 0 %}
+                    <h3 class="mb-3">EMPTY</h3>
+                {% else %}
+                    <h3 class="mb-3">{{ name }}</h3>
+                    <h5 class="mb-3">{{ description }}</h5>
+                {% endif %}
             </div>
             <div class="w-100">
                 <hr class="my-hr">
             </div>
-            <div class="d-flex w-25">
-                <ol id="songs">
-                    {% for track in all_track_names: %}
-                    <li>{{ track }}</li>
-                    {% endfor %}
-                </ol>
-            </div>
+            {% if not all_tracks %}
+                <div class="d-flex justify-content-center w-25">
+                    <a class="btn btn-light " href="#">Add to this playlist</a>
+                </div>
+            {% else %}
+                <div class="d-flex w-25"></div>
+                    <ol id="songs">
+                        {% for track in all_tracks: %}
+                        <li>{{ track['track_name'] }}</li>
+                        <ul>
+                            <li>{{ track['artist_name'] }}</li>
+                            <li>{{ track['track_album_cover'] }}</li>
+                        </ul>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endif %}
         </div>
     </section>
 {% endblock %}

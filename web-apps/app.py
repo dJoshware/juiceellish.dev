@@ -95,6 +95,7 @@ def playlister_index():
 
     return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
 
+
 # Playlists page
 @app.route('/playlister/<playlist>:<id>')
 def playlister_playlist(playlist, id):
@@ -122,10 +123,14 @@ def playlister_playlist(playlist, id):
             else:
                 image = item['images'][0]['url']
             
+            # Playlist description
             description = item['description']
+            
+            # Total number of tracks in playlist
+            track_total = item['tracks']['total']
 
             # Empty list to append song names to
-            all_track_names = []
+            all_tracks = []
             offset = 0
 
             # Loop over playlist items to generate list of all the playlist's songs
@@ -137,59 +142,51 @@ def playlister_playlist(playlist, id):
                     break # No more tracks to retrieve
 
                 for track in tracks:
-                    # Extract track name and append to empty list
+                    # Extract track name, album cover, and artist name and append to empty list
                     track_name = track['track']['name']
-                    all_track_names.append(track_name)
+                    artist_name = track['track']['artists'][0]['name']
+                    track_album_cover = track['track']['album']['images'][2]['url']
+
+                    track_details = {
+                        'track_name': track_name,
+                        'artist_name': artist_name,
+                        'track_album_cover': track_album_cover
+                    }
+                    all_tracks.append(track_details)
 
                 # Update offset by 100 for next iteration
                 offset += len(tracks)
 
-            # ARTIST NAME
-            # print(track['track']['album']['artists'][0]['name'])
 
-            # ALBUM NAME OF TRACK
-            # print(track['track']['album']['name'])
+    return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, track_total=track_total)
 
-            # ALBUM IMAGES
-            # print(track['track']['album']['images'][0]['url'])
-            # print(track['track']['album']['images'][1]['url'])
-            # print(track['track']['album']['images'][2]['url'])
-
-            # TRACK NAME
-            # tracks = track['track']['name']
-
-
-    return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_track_names=all_track_names)
 
 # Delete playlist
 @app.route('/playlister/delete_playlist/<id>')
 def delete_playlist(id):
     ''' Delete a playlist from a user's profile. '''
 
-    # Test functionality
-    playlist = sp.playlist(id)
-    for item in playlist['tracks']['items']:
-        print(item)
-    '''
-    FIX:
-        PRINT ALL PLAYLIST ITEMS; CUTS OFF AT 100
-        GET LIST OF TRACK URIS
-        EXAMPLE:
-        {
-            "tracks": [
-                {
-                    "uri": "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
-                },
-                {
-                    "uri": "spotify:track:1301WleyT98MSxVHPZCA6M"
-                }
-            ]
-        }
-    '''
-    # print(playlist['tracks']['items'][1])
+    # Empty list to append track uris to
+    all_track_ids = []
+    offset = 0
 
-    # sp.playlist_remove_all_occurrences_of_items(playlist_id=id)
-    print(f'Playlist {id} DELETED')
+    # Loop over playlist items to generate list of all the playlist's songs
+    while True:
+        track_group = sp.playlist_tracks(id, offset=offset)
+        tracks = track_group['items']
+
+        if not tracks:
+            break # No more tracks to retrieve
+
+        for track in tracks:
+            # Extract track id and append to empty list
+            track_id = track['track']['id']
+            all_track_ids.append(track_id)
+
+        # Update offset by 100 for next iteration
+        offset += len(tracks)
+
+    sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
 
     return redirect('/playlister/index')
 
