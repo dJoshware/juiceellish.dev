@@ -25,11 +25,7 @@
                     </a>
                     <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
                     <div class="card-body mb-5">
-                        {% if playlist['tracks']['total'] == 0 %}
-                            <h5 class="card-title">EMPTY</h5>
-                        {% else %}
-                            <h5 class="card-title">{{ playlist['name'] }}</h5>
-                        {% endif %}
+                        <h5 class="card-title">{{ playlist['name'] }}</h5>
                     </div>
                 </div>
             </div>

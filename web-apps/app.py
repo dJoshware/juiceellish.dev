@@ -125,9 +125,9 @@ def playlister_playlist(playlist, id):
             
             # Playlist description
             description = item['description']
-            
-            # Total number of tracks in playlist
-            track_total = item['tracks']['total']
+
+            # Playlist owner's name
+            owner = item['owner']['display_name']
 
             # Empty list to append song names to
             all_tracks = []
@@ -158,7 +158,7 @@ def playlister_playlist(playlist, id):
                 offset += len(tracks)
 
 
-    return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, track_total=track_total)
+    return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
 
 # Delete playlist
@@ -166,27 +166,7 @@ def playlister_playlist(playlist, id):
 def delete_playlist(id):
     ''' Delete a playlist from a user's profile. '''
 
-    # Empty list to append track uris to
-    all_track_ids = []
-    offset = 0
-
-    # Loop over playlist items to generate list of all the playlist's songs
-    while True:
-        track_group = sp.playlist_tracks(id, offset=offset)
-        tracks = track_group['items']
-
-        if not tracks:
-            break # No more tracks to retrieve
-
-        for track in tracks:
-            # Extract track id and append to empty list
-            track_id = track['track']['id']
-            all_track_ids.append(track_id)
-
-        # Update offset by 100 for next iteration
-        offset += len(tracks)
-
-    sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
+    sp.current_user_unfollow_playlist(playlist_id=id)
 
     return redirect('/playlister/index')
 
@@ -224,6 +204,42 @@ def create_playlist():
         return redirect('/playlister/index')
 
     return render_template('playlister/create_playlist.html', username=username, sm_image=sm_image)
+
+
+@app.route('/playlister/edit', methods=['GET', 'POST'])
+def edit_playlist():
+    ''' Allow user to edit selected playlists. '''
+
+    if request.method == 'POST':
+
+        # GET FORM DATA FOR SELECTED TRACKS TO DELETE
+
+        # Empty list to append track uris to
+        all_track_ids = []
+        offset = 0
+
+        # Loop over playlist items to generate list of all the playlist's songs
+        while True:
+            track_group = sp.playlist_tracks(id, offset=offset)
+            tracks = track_group['items']
+
+            if not tracks:
+                break # No more tracks to retrieve
+
+            for track in tracks:
+                # Extract track id and append to empty list
+                track_id = track['track']['id']
+                all_track_ids.append(track_id)
+
+            # Update offset by 100 for next iteration
+            offset += len(tracks)
+
+        sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
+        # END TRACK SELECTION DELETION
+
+        # return 
+
+    return render_template('playlister/edit_playlist.html')
 
 
 if __name__ == "__main__":

@@ -22,6 +22,28 @@ body {
     margin-right: .5rem;
     margin-bottom: 1rem;
 }
+#logo_div {
+    position: relative;
+}
+#logo_div #logo {
+    height: 100px;
+}
+#logo_div #beta {
+    height: 0.625rem;
+    left: 13.75rem;
+    position: absolute;
+    top: 4.375rem;
+}
+@media screen and (min-width: 768px) {
+    #logo_div #logo {
+        height: 150px;
+    }
+    #logo_div #beta {
+        height: 1rem;
+        left: 20rem;
+        top: 6.25rem;
+    }
+}
 .btn-outline-info {
     border-color: var(--logo-blue);
     color: var(--text-color);
@@ -53,3 +75,5 @@ body {
 #songs {
     text-align: left;
 }
+
+/* MEDIA QUERY/CONTAINER FOR <576PX MAKE NAVBAR SMALLER */
