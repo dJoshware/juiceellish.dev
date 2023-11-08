@@ -106,56 +106,59 @@ def playlister_playlist(playlist, id):
     username = user['display_name']
     sm_image = user['images'][0]['url']
 
-    # Get user playlists
-    playlists = sp.current_user_playlists()
+    # Get user's selected playlist
+    _playlist = sp.playlist(id)
 
+    # Playlist name
+    name = _playlist['name']
+    
+    # Playlist description
+    description = _playlist['description']
+
+    # Playlist owner
+    owner = _playlist['owner']['display_name']
+    
     # Flag for playlist cover check
     has_image = True
 
-    # Loop over playlists to get cover image, name, description, and id
-    for item in playlists['items']:
-        # Get playlist info that the user selected
-        if item['name'] == playlist:
-            # If playlist doesn't have cover image, use default
-            if not item['images']:
-                has_image = False
-                image = None # Needs value to avoid UnboundLocalError
-            else:
-                image = item['images'][0]['url']
-            
-            # Playlist description
-            description = item['description']
+    # Get playlist info that the user selected
+    if name == playlist:
+        # If playlist doesn't have cover image, use default
+        if not _playlist['images']:
+            has_image = False
+            image = None # Needs value to avoid UnboundLocalError
+        else:
+            image = _playlist['images'][0]['url']
+        
+        # Empty list to append song names to
+        all_tracks = []
+        offset = 0
 
-            # Playlist owner's name
-            owner = item['owner']['display_name']
+        # Loop over playlist items to generate list of all the playlist's songs
+        while True:
+            track_group = sp.playlist_tracks(id, offset=offset)
+            tracks = track_group['items']
 
-            # Empty list to append song names to
-            all_tracks = []
-            offset = 0
+            if not tracks:
+                break # No more tracks to retrieve
 
-            # Loop over playlist items to generate list of all the playlist's songs
-            while True:
-                track_group = sp.playlist_tracks(id, offset=offset)
-                tracks = track_group['items']
+            for track in tracks:
+                # Extract track name, id, album cover, and artist name and append to empty list
+                track_name = track['track']['name']
+                track_id = track['track']['id']
+                artist_name = track['track']['artists'][0]['name']
+                track_album_cover = track['track']['album']['images'][2]['url']
 
-                if not tracks:
-                    break # No more tracks to retrieve
+                track_details = {
+                    'track_name': track_name,
+                    'track_id': track_id,
+                    'artist_name': artist_name,
+                    'track_album_cover': track_album_cover
+                }
+                all_tracks.append(track_details)
 
-                for track in tracks:
-                    # Extract track name, album cover, and artist name and append to empty list
-                    track_name = track['track']['name']
-                    artist_name = track['track']['artists'][0]['name']
-                    track_album_cover = track['track']['album']['images'][2]['url']
-
-                    track_details = {
-                        'track_name': track_name,
-                        'artist_name': artist_name,
-                        'track_album_cover': track_album_cover
-                    }
-                    all_tracks.append(track_details)
-
-                # Update offset by 100 for next iteration
-                offset += len(tracks)
+            # Update offset by 100 for next iteration
+            offset += len(tracks)
 
 
     return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
@@ -206,16 +209,41 @@ def create_playlist():
     return render_template('playlister/create_playlist.html', username=username, sm_image=sm_image)
 
 
-@app.route('/playlister/edit', methods=['GET', 'POST'])
-def edit_playlist():
-    ''' Allow user to edit selected playlists. '''
+@app.route('/playlister/edit/<playlist>:<id>', methods=['GET', 'POST'])
+def edit_playlist(playlist, id):
+    ''' Allow user to edit selected playlist. '''
 
-    if request.method == 'POST':
+    # Get user profile information to display username
+    user = sp.current_user()
+    username = user['display_name']
+    sm_image = user['images'][0]['url']
 
-        # GET FORM DATA FOR SELECTED TRACKS TO DELETE
+    # Get user's selected playlist
+    _playlist = sp.playlist(id)
+
+    # Playlist name
+    name = _playlist['name']
+    
+    # Playlist description
+    description = _playlist['description']
+
+    # Playlist owner
+    owner = _playlist['owner']['display_name']
+
+    # Flag for playlist cover check
+    has_image = True
+
+    # Get playlist info that the user selected
+    if name == playlist:
+        # If playlist doesn't have cover image, use default
+        if not _playlist['images']:
+            has_image = False
+            image = None # Needs value to avoid UnboundLocalError
+        else:
+            image = _playlist['images'][0]['url']
 
         # Empty list to append track uris to
-        all_track_ids = []
+        all_tracks = []
         offset = 0
 
         # Loop over playlist items to generate list of all the playlist's songs
@@ -227,19 +255,28 @@ def edit_playlist():
                 break # No more tracks to retrieve
 
             for track in tracks:
-                # Extract track id and append to empty list
+                # Extract track name, id, album cover, and artist name and append to empty list
+                track_name = track['track']['name']
                 track_id = track['track']['id']
-                all_track_ids.append(track_id)
+                artist_name = track['track']['artists'][0]['name']
+                track_album_cover = track['track']['album']['images'][2]['url']
+
+                track_details = {
+                    'track_name': track_name,
+                    'track_id': track_id,
+                    'artist_name': artist_name,
+                    'track_album_cover': track_album_cover
+                }
+                all_tracks.append(track_details)
 
             # Update offset by 100 for next iteration
             offset += len(tracks)
 
-        sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
-        # END TRACK SELECTION DELETION
+        # sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
 
-        # return 
+        # return redirect('/playlister/<playlist>:<id>')
 
-    return render_template('playlister/edit_playlist.html')
+    return render_template('playlister/edit_playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
 
 if __name__ == "__main__":

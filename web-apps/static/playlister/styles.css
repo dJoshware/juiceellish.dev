@@ -13,9 +13,15 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: 'bryant', sans-serif;
-    font-weight: 400;
+    font-weight: 300;
     height: 100%;
     letter-spacing: .08rem;
+}
+hr {
+    margin: 0;
+}
+.text-color {
+    color: var(--text-color);
 }
 #pfp {
     border-radius: 50%;
@@ -34,16 +40,6 @@ body {
     position: absolute;
     top: 4.375rem;
 }
-@media screen and (min-width: 768px) {
-    #logo_div #logo {
-        height: 150px;
-    }
-    #logo_div #beta {
-        height: 1rem;
-        left: 20rem;
-        top: 6.25rem;
-    }
-}
 .btn-outline-info {
     border-color: var(--logo-blue);
     color: var(--text-color);
@@ -55,6 +51,7 @@ body {
 .my-hr {
     border-top: 2px solid var(--logo-blue);
     border-radius: 5px;
+    margin: .5rem;
     opacity: 1;
 }
 .col {
@@ -75,5 +72,34 @@ body {
 #songs {
     text-align: left;
 }
+#songs #artist {
+    font-size: .8125rem;
+    color: #aeaeae;
+}
+.modal-content {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+.form-check-input:checked {
+    background-color: var(--logo-blue);
+}
 
-/* MEDIA QUERY/CONTAINER FOR <576PX MAKE NAVBAR SMALLER */
+/* MOBILE DEFAULTS GO BELOW, EVERYTHING ELSE GOES OUTSIDE OF IT */
+@media screen and (min-width: 768px) {
+    #logo_div #logo {
+        height: 150px;
+    }
+    #logo_div #beta {
+        height: 1rem;
+        left: 20rem;
+        top: 6.25rem;
+    }
+    .modal-content {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+    }
+    .form-check-input:checked {
+        background-color: var(--logo-blue);
+    }
+    
+}
