@@ -11,6 +11,7 @@
                 <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
                     <div class="d-flex w-25">
                         <!-- MAKE CANCEL BUTTON A MODAL -->
+                        <!-- MAKE CANCEL/SAVE STICK TO TOP -->
                         <a class="btn btn-outline-danger flex-fill m-3" href="{{ url_for('playlister_playlist', playlist=name, id=id) }}">Cancel</a>
                         <button class="btn btn-outline-info flex-fill m-3" type="submit">Save</button>
                     </div>
@@ -39,6 +40,13 @@
                     </div>
                 {% else %}
                     <div class="d-flex flex-column w-50">
+                        <div class="d-flex flex-row my-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="selectAll" onchange="select_all()">
+                                <label class="form-check-label" for="selectAll">Select All</label>
+                            </div>
+                        </div>
+                        <hr>
                         {% for track in all_tracks %}
                             <div class="d-flex flex-row" id="songs">
                                 <div class="d-flex flex-column justify-content-center form-check form-switch">
@@ -87,6 +95,15 @@
                     event.preventDefault();
                     deleteModal.style.display = 'none';
                 });
+
+                // JS for 'selectAll' checkbox
+                function select_all() {
+                    var select_all = document.getElementById('selectAll');
+                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = select_all.checked;
+                    }
+                };
             </script>
         </div>
     </section>
