@@ -61,6 +61,13 @@ hr {
     color: var(--bg-color);
     width: 18.75rem;
 }
+.my-btn {
+    width: 100px !important;
+}
+.my-btns {
+    margin: 1rem !important;
+    width: 250px;
+}
 #card {
     border: none;
     color: var(--text-color);

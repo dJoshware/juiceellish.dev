@@ -327,5 +327,14 @@ def edit_playlist(playlist, id):
     return render_template('playlister/edit_playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
 
+@app.route('/playlister/search', methods=['GET', 'POST'])
+def playlister_search():
+    ''' Let user search for artists, albums, songs, episodes, or playlists and add them to there library. '''
+
+    sp.search()
+
+    return render_template('playlister/search.html')
+
+
 if __name__ == "__main__":
     app.run()

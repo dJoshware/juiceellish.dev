@@ -1,7 +1,7 @@
 {% extends "playlister/layout.html" %}
 
 {% block title %}
-    Playlists - Playlister
+    Edit Playlist - Playlister
 {% endblock %}
 
 {% block main %}
@@ -9,10 +9,10 @@
         <div class="container-fluid d-flex flex-column align-items-center">
             <form action="/playlister/edit/{{ name }}:{{ id }}" class="d-inline-flex flex-column justify-content-center align-items-center w-100" id="formPUT" method="POST">
                 <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
-                    <div class="d-flex w-25">
+                    <div class="d-flex my-btns">
                         <!-- MAKE CANCEL/SAVE STICK TO TOP -->
-                        <a class="btn btn-outline-danger flex-fill m-3" href="{{ url_for('playlister_playlist', playlist=name, id=id) }}">Cancel</a>
-                        <button class="btn btn-outline-info flex-fill m-3" data-bs-target="#saveModal" data-bs-toggle="modal" type="button">Save</button>
+                        <a class="btn btn-outline-danger flex-fill m-3 my-btn" href="{{ url_for('playlister_playlist', playlist=name, id=id) }}">Cancel</a>
+                        <button class="btn btn-outline-info flex-fill m-3 my-btn" data-bs-target="#saveModal" data-bs-toggle="modal" type="button">Save</button>
                     </div>
                     {% if has_image == False %}
                         <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
@@ -35,7 +35,7 @@
                 </div>
                 {% if not all_tracks %}
                     <div class="d-flex justify-content-center w-25">
-                        <a class="btn btn-light" href="#">Add to this playlist</a>
+                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search') }}">Add to this playlist</a>
                     </div>
                 {% else %}
                     <div class="d-flex flex-column w-50">
@@ -72,8 +72,8 @@
                                 <p>Are you sure you want to save these changes?</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button class="btn btn-outline-info" type="submit">Save</button>
+                                <button type="button" class="btn btn-secondary my-btn" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-outline-info my-btn" type="submit">Save</button>
                             </div>
                         </div>
                     </div>

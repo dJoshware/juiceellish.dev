@@ -1,0 +1,51 @@
+{% extends "playlister/layout.html" %}
+
+{% block title %}
+    Edit Playlist - Playlister
+{% endblock %}
+
+{% block main %}
+    <section>
+        <div class="container-fluid d-flex flex-column align-items-center">
+            <form action="/playlister/search" class="d-inline-flex flex-column justify-content-center align-items-center w-100" method="POST">
+                <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
+                    <div class="input-group m-3">
+                        <span class="input-group-text material-symbols-outlined" id="basic-addon1">search</span>
+                        <input aria-describedby="basic-addon1" aria-label="Search" class="form-control" name="search_bar" placeholder="Search" type="text">
+                    </div>
+                </div>
+                <div class="w-100">
+                    <hr class="my-hr">
+                </div>
+                {% if not all_tracks %}
+                    <div class="d-flex justify-content-center w-25">
+                        <a class="btn btn-light" href="#">Add to this playlist</a>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-column w-50">
+                        <div class="d-flex flex-row my-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="selectAll">
+                                <label class="form-check-label" for="selectAll">Select All</label>
+                            </div>
+                        </div>
+                        <hr>
+                        {% for track in all_tracks %}
+                            <div class="d-flex flex-row" id="songs">
+                                <div class="d-flex flex-column justify-content-center form-check form-switch">
+                                    <input class="form-check-input" name="{{ track['track_id'] }}" type="checkbox" role="switch">
+                                </div>
+                                <img class="d-inline py-2 pe-3" src="{{ track['track_album_cover'] }}" alt="{{ track['track_name'] }} Album Cover">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <div class="d-block">{{ track['track_name'] }}</div>
+                                    <div class="d-block" id="artist">{{ track['artist_name'] }}</div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+{% endblock %}
