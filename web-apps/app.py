@@ -1,8 +1,8 @@
-import os, requests
+import os, requests, base64, re
 
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
@@ -29,12 +29,12 @@ cache = Cache(app)
 
 # Constants
 OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize?'
-# OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
+OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
 RES_CODE = 'code'
-SCOPE = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public'
+SCOPE = 'user-read-private user-read-email playlist-read-private playlist-modify-private playlist-modify-public ugc-image-upload'
 STATE = generate_random_string(16)
 
 params = {
@@ -58,6 +58,32 @@ oauth = SpotifyOAuth(
 sp = Spotify(auth_manager=oauth)
 
 
+# GET ACCESS TOKEN FOR SPOTIFY
+@app.route('/playlister/get_spotify_token', methods=['GET', 'POST'])
+def get_spotify_token():
+    client_id = CLIENT_ID
+    client_secret = CLIENT_SECRET
+
+    auth_headers = {
+        'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
+    }
+
+    auth_data = {
+        'grant_type': 'client_credentials',
+    }
+
+    auth_url = OAUTH_TOKEN_URL
+
+    res = requests.post(auth_url, headers=auth_headers, data=auth_data)
+
+    if res.status_code == 200:
+        body = res.json()
+        access_token = body['access_token']
+        return access_token
+    else:
+        return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
+    
+
 # PORTFOLIO ROUTES
 
 # Home route / juiceellish.dev landing page
@@ -79,6 +105,9 @@ def home():
 # @cache.cached()
 def playlister_index():
     ''' Playlister app landing page. '''
+
+    # Authorize user?
+    # get_spotify_token()
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -124,11 +153,11 @@ def playlister_playlist(playlist, id):
     # Get playlist info that the user selected
     if name == playlist:
         # If playlist doesn't have cover image, use default
-        if not _playlist['images']:
+        if _playlist['images']:
+            image = _playlist['images'][0]['url']
+        else:
             has_image = False
             image = None # Needs value to avoid UnboundLocalError
-        else:
-            image = _playlist['images'][0]['url']
         
         # Empty list to append song names to
         all_tracks = []
@@ -159,7 +188,6 @@ def playlister_playlist(playlist, id):
 
             # Update offset by 100 for next iteration
             offset += len(tracks)
-
 
     return render_template('playlister/playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
@@ -272,9 +300,28 @@ def edit_playlist(playlist, id):
             # Update offset by 100 for next iteration
             offset += len(tracks)
 
-        # sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_track_ids)
+    # Save changes made when editing playlist
+    if request.method == 'POST':
 
-        # return redirect('/playlister/<playlist>:<id>')
+        # image_edit = request.form.get('cover_image')
+        # if image_edit:
+            
+        #     sp.playlist_upload_cover_image(playlist_id=id, image_b64=image_edit)
+        
+        title_edit = request.form.get('playlist_name')
+        description_edit = request.form.get('playlist_desc')
+        selectedIds = request.form.get('selectedIds')
+        
+        sp.playlist_change_details(playlist_id=id, name=title_edit, description=description_edit)
+
+        if not selectedIds == '':
+            all_tracks_edit = selectedIds.split(',')
+            sp.playlist_remove_all_occurrences_of_items(playlist_id=id, items=all_tracks_edit)
+        else:
+            pass
+        
+        return redirect('/playlister/index')
+
 
     return render_template('playlister/edit_playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
