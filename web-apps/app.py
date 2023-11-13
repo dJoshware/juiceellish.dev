@@ -303,6 +303,7 @@ def edit_playlist(playlist, id):
     # Save changes made when editing playlist
     if request.method == 'POST':
 
+        # CUSTOM IMAGE UPLOAD NEEDS WORK
         # image_edit = request.form.get('cover_image')
         # if image_edit:
             

@@ -53,30 +53,36 @@ $(document).ready(function() {
     }
 
     // Setup 'PUT' request for custom cover image
-    $('formPUT').on('submit', function(e) {
-        e.preventDefault() // Prevent default action of link
+    // NEEDS WORK
+    // $('#formPUT').on('submit', function(e) {
+    //     e.preventDefault() // Prevent default action of link
 
-        // Get value of 'cover_image' input field
-        const coverImage = $('[name="cover_image"]').value;
+    //     // Get the value of 'cover_image' input field
+    //     const coverImageInput = $('input[name="cover_image"]')[0]; // Use [0] to get the DOM element
+    //     const coverImage = coverImageInput.files[0];
 
-        // Perform a PUT request using the Fetch API
-        fetch(currentURL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'image-jpeg',
-            },
-            body: JSON.stringify({cover_image: coverImage})
-        })
-        .then(res => {
-            if (res.ok) {
-                console.log('PUT request successful');
-            } else {
-                console.error('PUT request failed');
-            }
-        })
-        .catch(err => {
-            console.error('Network error:', err);
-        });
-    });
+    //     // Create FormData object and append the file to it
+    //     const formData = new FormData();
+    //     formData.append('cover_image', coverImage);
+
+    //     // Grab playlist id from DOM
+    //     var playlist_id = $('input[name="playlistId"]').val();
+
+    //     // Perform a PUT request using $.ajax
+    //     $.ajax({
+    //         url: `https://api.spotify.com/v1/playlists/${playlist_id}/images`,
+    //         type: 'PUT',
+    //         headers: ,
+    //         data: formData,
+    //         processData: false, // Prevent jQuery from processing the data
+    //         contentType: false, // Prevent jQuery from setting contentType
+    //         success: function (data, textStatus, jqXHR) {
+    //             console.log('PUT request successful');
+    //         },
+    //         error: function (jqXHR, textStatus, errorThrown) {
+    //             console.error('PUT request failed');
+    //         }
+    //     });
+    // });
 
 });

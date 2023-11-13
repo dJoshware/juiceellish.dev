@@ -19,10 +19,10 @@
                     {% else %}
                         <img src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
                     {% endif %}
-                    <div class="form-width m-3">
+                    <!-- <div class="form-width m-3">
                         <label for="coverImage" class="form-label text-color">Change Image</label>
                         <input class="form-control" id="coverImage" name="cover_image" type="file">
-                    </div>
+                    </div> -->
                     <div class="form-width m-3">
                         <input autocomplete="off" class="form-control" name="playlist_name" type="text" value="{{ name }}">
                     </div>
@@ -82,6 +82,11 @@
                 <div style="position: absolute; visibility: hidden;">
                     <input id="hiddenList" name="selectedIds" value="">
                 </div>
+                <!-- Location to send playlist id to grab in app.js -->
+                <!-- WORKS WITH IMAGE UPLOAD; IN PROGRESS -->
+                <!-- <div style="position: absolute; visibility: hidden;">
+                    <input name="playlistId" value="{{ id }}">
+                </div> -->
             </form>
         </div>
     </section>
