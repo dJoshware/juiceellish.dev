@@ -35,7 +35,7 @@
                 </div>
                 {% if not all_tracks %}
                     <div class="d-flex justify-content-center w-25">
-                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search') }}">Add to this playlist</a>
+                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                     </div>
                 {% else %}
                     <div class="d-flex flex-column w-50">

@@ -120,7 +120,8 @@ def playlister_index():
     # lg_image = user['images'][1]['url']
 
     # Get user playlists
-    playlists = sp.current_user_playlists()
+    playlists = sp.current_user_playlists() # limit 50...
+    # CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
 
     return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
 
@@ -327,13 +328,84 @@ def edit_playlist(playlist, id):
     return render_template('playlister/edit_playlist.html', name=playlist, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, all_tracks=all_tracks, owner=owner)
 
 
-@app.route('/playlister/search', methods=['GET', 'POST'])
-def playlister_search():
-    ''' Let user search for artists, albums, songs, episodes, or playlists and add them to there library. '''
+@app.route('/playlister/search:<id>', methods=['GET', 'POST'])
+def playlister_search(id):
+    ''' Let user search for artists, albums, songs, episodes, or playlists and add them to their library. '''
 
-    sp.search()
+    # DEV NOTE: INTEGRATE DATABASE OF SPOTIFY IDs, URIs, and/or URLs OF ALL EPISODES, PODCASTS, PLAYLISTS, ARTISTS, ALBUMS, AND TRACKS
 
-    return render_template('playlister/search.html')
+    # Get user profile information to display username
+    user = sp.current_user()
+    username = user['display_name']
+    sm_image = user['images'][0]['url']
+
+    # Get user's selected playlist
+    _playlist = sp.playlist(id)
+
+    # Playlist name
+    name = _playlist['name']
+    
+    # Playlist description
+    description = _playlist['description']
+
+    # Playlist owner
+    owner = _playlist['owner']['display_name']
+
+    # Flag for playlist cover check
+    has_image = True
+
+    # If playlist doesn't have cover image, use default
+    if not _playlist['images']:
+        has_image = False
+        image = None # Needs value to avoid UnboundLocalError
+    else:
+        image = _playlist['images'][0]['url']
+
+
+    query = input('Search Query: ').strip()
+    if query:
+        search = sp.search(q=query, type='artist')
+        artist_items = search['artists']['items']
+        for item in artist_items:
+            artist_name = item['name'].lower()
+            if artist_name == query.lower():
+                offset = 0
+                artist_id = item["id"]
+
+                while True:
+                    artist_albums = sp.artist_albums(artist_id=artist_id, album_type='album,single,appears_on', offset=offset)
+                    items = artist_albums['items']
+                    for item in items:
+                        _artist_id = item['artists'][0]['id']
+                        # WORKING ON GETTING ALBUMS FROM THIS LOOP
+                        # WAS USING DICTIONARY FORMATTER TO PERUSE RESULTS
+                        print(item)
+
+                        if not items:
+                            break
+
+                        offset += 20
+
+                    break
+                print(artist_albums)
+            
+        # while True:
+        #     search = sp.search(q=query, offset=offset, limit=50, type='album,artist')
+        #     items = search['albums']['items']
+        #     artist_id = items['artists']['id']
+
+        #     if not items:
+        #         break
+
+        #     total += len(items)
+        #     offset += len(items)
+        # print(total)
+        # print(search)
+    else:
+        print("No input")
+    
+
+    return render_template('playlister/search.html', id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner)
 
 
 if __name__ == "__main__":

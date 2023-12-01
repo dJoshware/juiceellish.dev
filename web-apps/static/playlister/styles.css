@@ -4,6 +4,8 @@
     margin: 0;
     padding: 0;
 }
+/* NEW BLUE: #00B8FC */
+/* NEW BLACK: #202124 */
 :root {
     --bg-color: #212529;
     --logo-blue: #54E1FA;
@@ -108,5 +110,4 @@ hr {
     .form-check-input:checked {
         background-color: var(--logo-blue);
     }
-    
 }
