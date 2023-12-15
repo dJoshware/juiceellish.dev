@@ -52,6 +52,17 @@ $(document).ready(function() {
         $('#hiddenList').val(selectedIds.join(','));
     }
 
+    // Function to add songs to a playlist
+    $('.add_to_playlist').on('click', function(e) {
+        e.preventDefault();
+        var song_id = $(this).val();
+        var playlist_id = $(this).attr('name');
+        $.getJSON(`/playlister/add_to_playlist/${playlist_id}:${song_id}`, function(e) {
+            // do nothing
+        });
+        return false;
+    });
+
     // Setup 'PUT' request for custom cover image
     // NEEDS WORK
     // $('#formPUT').on('submit', function(e) {

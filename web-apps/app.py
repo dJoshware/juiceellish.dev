@@ -1,5 +1,6 @@
-import os, requests, base64, re
+import os, requests, base64, json
 
+from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -281,20 +282,15 @@ def edit_playlist(playlist, id):
             tracks = track_group['items']
 
             if not tracks:
-                break # No more tracks to retrieve
+                break
 
             for track in tracks:
                 # Extract track name, id, album cover, and artist name and append to empty list
-                track_name = track['track']['name']
-                track_id = track['track']['id']
-                artist_name = track['track']['artists'][0]['name']
-                track_album_cover = track['track']['album']['images'][2]['url']
-
                 track_details = {
-                    'track_name': track_name,
-                    'track_id': track_id,
-                    'artist_name': artist_name,
-                    'track_album_cover': track_album_cover
+                    'track_name': track['track']['name'],
+                    'track_id': track['track']['id'],
+                    'artist_name': track['track']['artists'][0]['name'],
+                    'track_album_cover': track['track']['album']['images'][2]['url']
                 }
                 all_tracks.append(track_details)
 
@@ -314,7 +310,10 @@ def edit_playlist(playlist, id):
         description_edit = request.form.get('playlist_desc')
         selectedIds = request.form.get('selectedIds')
         
-        sp.playlist_change_details(playlist_id=id, name=title_edit, description=description_edit)
+        if description_edit:
+            sp.playlist_change_details(playlist_id=id, name=title_edit, description=description_edit)
+        else:
+            sp.playlist_change_details(playlist_id=id, name=title_edit)
 
         if not selectedIds == '':
             all_tracks_edit = selectedIds.split(',')
@@ -332,7 +331,22 @@ def edit_playlist(playlist, id):
 def playlister_search(id):
     ''' Let user search for artists, albums, songs, episodes, or playlists and add them to their library. '''
 
-    # DEV NOTE: INTEGRATE DATABASE OF SPOTIFY IDs, URIs, and/or URLs OF ALL EPISODES, PODCASTS, PLAYLISTS, ARTISTS, ALBUMS, AND TRACKS
+    # Call in template to get songs for each album
+    def get_album(id):
+        ''' Return songs of an album. '''
+
+        album = sp.album(album_id=id)
+        items = album['tracks']['items']
+        all_songs = []
+        for song in items:
+            song = {
+                'song_image': album['images'][2]['url'],
+                'song_name': song['name'],
+                'song_id': song['id']
+            }
+            all_songs.append(song)
+        return all_songs
+
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -360,52 +374,110 @@ def playlister_search(id):
         image = None # Needs value to avoid UnboundLocalError
     else:
         image = _playlist['images'][0]['url']
-
-
-    query = input('Search Query: ').strip()
-    if query:
-        search = sp.search(q=query, type='artist')
-        artist_items = search['artists']['items']
-        for item in artist_items:
-            artist_name = item['name'].lower()
-            if artist_name == query.lower():
-                offset = 0
-                artist_id = item["id"]
-
-                while True:
-                    artist_albums = sp.artist_albums(artist_id=artist_id, album_type='album,single,appears_on', offset=offset)
-                    items = artist_albums['items']
-                    for item in items:
-                        _artist_id = item['artists'][0]['id']
-                        # WORKING ON GETTING ALBUMS FROM THIS LOOP
-                        # WAS USING DICTIONARY FORMATTER TO PERUSE RESULTS
-                        print(item)
-
-                        if not items:
-                            break
-
-                        offset += 20
-
-                    break
-                print(artist_albums)
-            
-        # while True:
-        #     search = sp.search(q=query, offset=offset, limit=50, type='album,artist')
-        #     items = search['albums']['items']
-        #     artist_id = items['artists']['id']
-
-        #     if not items:
-        #         break
-
-        #     total += len(items)
-        #     offset += len(items)
-        # print(total)
-        # print(search)
-    else:
-        print("No input")
     
+    # Empty list to send to template
+    sorted_albums = []
 
-    return render_template('playlister/search.html', id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner)
+    if request.method == 'POST':
+        # Takes search query from user in search bar
+        # query = input('Search Query: ').strip()
+        query = request.form.get('search_bar').strip()
+        # If user typed anything, continues
+        if query:
+            # Searches the query using spotipy and returns a list of artists
+            search = sp.search(q=query, type='artist')
+            # Gets artists name and Spotify id from search result
+            artist_name = search['artists']['items'][0]['name'].lower()
+            artist_id = search['artists']['items'][0]['id']
+            # If the search result name and user query match, continues
+            if artist_name == query.lower():
+                # Empty list to append album details to
+                offset = 0
+                all_artist_albums = []
+                # Loop over details of artist albums to generate new list to use in search.html
+                while True:
+                    # Using user's query, return a list of the artist's albums
+                    artist_albums = sp.search(q=query, type='album', offset=offset)
+                    albums = artist_albums['albums']['items']
+                    
+                    if not albums:
+                        break # If nothing returned
+
+                    # Loop through each item returned in 'albums'
+                    for album in albums:
+                        # If the artist's id from the first artist search query matches the artist's id found in the album search query, continue
+                        if artist_id == album['artists'][0]['id']:
+                            # Create custom dictionary to use in search.html
+                            album_details = {
+                                'release_date': album['release_date'],
+                                'artist_name': album['artists'][0]['name'],
+                                'album_name': album['name'],
+                                'album_id': album['id'],
+                                'album_cover_image': album['images'][2]['url'],
+                                'album_type': album['album_type'],
+                                'total_tracks': album['total_tracks']
+                            }
+                            # Append to empty list
+                            all_artist_albums.append(album_details)
+                    # Increase offset of spotipy's 'search' function to iterate over all of artist's albums
+                    offset += len(albums)
+                    if offset == 1000: # app breaks without this
+                        break
+                # Create new empty dictionary for sorted albums
+                album_dict = {}
+                # Loop over first empty list after it's filled
+                for album in all_artist_albums:
+                    release_date = album['release_date']
+                    album_name = album['album_name']
+                    album_type = album['album_type']
+
+                    # Check if release_date is already in YYYY format
+                    if len(release_date) == 4:
+                        formatted_release_date = release_date
+                    else:
+                        formatted_release_date = dt.strptime(release_date, '%Y-%m-%d').strftime('%Y')
+
+                    # Check if album_name is already in dictionary
+                    if album_name in album_dict:
+                        # Check album_type and compare release_dates to find most recent one
+                        if album_type == 'single' or (album_type == 'album' and formatted_release_date > album_dict[album_name]['release_date']):
+                            album_dict[album_name] = {'release_date': formatted_release_date, **album}
+                    else:
+                        # If album_name not in dictionary, add it
+                        album_dict[album_name] = {'release_date': formatted_release_date, **album}
+                
+                # Sort album_dict by release_date in descending order
+                sorted_albums = sorted(album_dict.values(), key=lambda x: (x['album_type'] == 'album', x['release_date'], x['album_name'], x['album_id'], x['total_tracks']), reverse=True)
+                
+                # DO SOMETHING WITH DATE FORMAT FOR HTML TEMPLATE?
+                # Now, album_dict contains most recent album for each unique album_name
+                # for album in _sorted_albums:
+                #     release_date = dt.strptime(album['release_date'], '%Y-%m-%d')
+                #     formatted_release_date = release_date.strftime('%Y')
+
+
+            else:
+                # If artist search query is incomplete
+                print('Check your spelling')
+        else:
+            # If user doesn't type anything
+            print("No input")
+
+
+    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, sorted_albums=sorted_albums, get_album=get_album)
+
+
+@app.route('/playlister/add_to_playlist/<playlist>:<id>')
+def add_to_playlist(playlist, id):
+    ''' Add an item to a playlist. '''
+
+    track = [id]
+    sp.playlist_add_items(playlist_id=playlist, items=track)
+    print(playlist)
+    print(id)
+    print()
+
+    return ''
 
 
 if __name__ == "__main__":
