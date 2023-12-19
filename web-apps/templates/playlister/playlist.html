@@ -55,7 +55,7 @@
                     document.getElementById('desc').innerHTML = finalDesc;
                 </script> -->
             </div>
-            {% if not all_tracks %}
+            {% if not all_tracks  %}
                 <div class="w-100">
                     <hr class="my-hr">
                 </div>
@@ -63,9 +63,11 @@
                     <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                 </div>
             {% else %}
-                <div class="d-flex justify-content-center w-25">
-                    <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
-                </div>
+                {% if owner == username %}
+                    <div class="d-flex justify-content-center w-25">
+                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                    </div>
+                {% endif %}
                 <div class="w-100">
                     <hr class="my-hr">
                 </div>

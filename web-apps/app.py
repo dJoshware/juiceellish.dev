@@ -3,12 +3,11 @@ import os, requests, base64, json
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, flash, jsonify, render_template, request, redirect, session
 from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
-import urllib.parse
 
 
 # Load environment variables
@@ -103,7 +102,6 @@ def home():
 
 # Landing page
 @app.route('/playlister/index')
-# @cache.cached()
 def playlister_index():
     ''' Playlister app landing page. '''
 
@@ -215,7 +213,7 @@ def create_playlist():
     sm_image = user['images'][0]['url']
 
     # Spotipy parameters for creating playlists
-    public_param = True
+    public_param = False
     collab_param = False
 
     if request.method == 'POST':
@@ -225,12 +223,16 @@ def create_playlist():
         public = request.form.get('public')
         collaborative = request.form.get('collaborative')
 
-        # Check if user unselected Public
-        if public == None:
-            public_param = False
+        # Check if user selected Public
+        if public == 'on':
+            public_param = True
         # Check if user selected Collaborative
         if collaborative == 'on':
             collab_param = True
+
+        if public == 'on' and collaborative == 'on':
+            flash('Collaborative playlists can only be private!')
+            return redirect('/playlister/create_playlist')
 
         sp.user_playlist_create(user=user['id'], name=playlist_name, public=public_param, collaborative=collab_param, description=description)
 
@@ -266,11 +268,11 @@ def edit_playlist(playlist, id):
     # Get playlist info that the user selected
     if name == playlist:
         # If playlist doesn't have cover image, use default
-        if not _playlist['images']:
+        if _playlist['images']:
+            image = _playlist['images'][0]['url']
+        else:
             has_image = False
             image = None # Needs value to avoid UnboundLocalError
-        else:
-            image = _playlist['images'][0]['url']
 
         # Empty list to append track uris to
         all_tracks = []
@@ -309,11 +311,9 @@ def edit_playlist(playlist, id):
         title_edit = request.form.get('playlist_name')
         description_edit = request.form.get('playlist_desc')
         selectedIds = request.form.get('selectedIds')
-        
-        if description_edit:
+
+        if title_edit and description_edit:
             sp.playlist_change_details(playlist_id=id, name=title_edit, description=description_edit)
-        else:
-            sp.playlist_change_details(playlist_id=id, name=title_edit)
 
         if not selectedIds == '':
             all_tracks_edit = selectedIds.split(',')
@@ -347,6 +347,8 @@ def playlister_search(id):
             all_songs.append(song)
         return all_songs
 
+    # Get id for flask error messaging redirection
+    playlist_id = id
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -380,7 +382,6 @@ def playlister_search(id):
 
     if request.method == 'POST':
         # Takes search query from user in search bar
-        # query = input('Search Query: ').strip()
         query = request.form.get('search_bar').strip()
         # If user typed anything, continues
         if query:
@@ -448,20 +449,16 @@ def playlister_search(id):
                 
                 # Sort album_dict by release_date in descending order
                 sorted_albums = sorted(album_dict.values(), key=lambda x: (x['album_type'] == 'album', x['release_date'], x['album_name'], x['album_id'], x['total_tracks']), reverse=True)
-                
-                # DO SOMETHING WITH DATE FORMAT FOR HTML TEMPLATE?
-                # Now, album_dict contains most recent album for each unique album_name
-                # for album in _sorted_albums:
-                #     release_date = dt.strptime(album['release_date'], '%Y-%m-%d')
-                #     formatted_release_date = release_date.strftime('%Y')
-
-
             else:
                 # If artist search query is incomplete
-                print('Check your spelling')
+                flash("ERROR: Unfinished query")
+                flash("Please provide an artist's full name.")
+                return redirect(f'/playlister/search:{playlist_id}')
         else:
             # If user doesn't type anything
-            print("No input")
+            flash("ERROR: No input")
+            flash("Please provide an artist's full name.")
+            return redirect(f'/playlister/search:{playlist_id}')
 
 
     return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, sorted_albums=sorted_albums, get_album=get_album)
@@ -473,9 +470,6 @@ def add_to_playlist(playlist, id):
 
     track = [id]
     sp.playlist_add_items(playlist_id=playlist, items=track)
-    print(playlist)
-    print(id)
-    print()
 
     return ''
 

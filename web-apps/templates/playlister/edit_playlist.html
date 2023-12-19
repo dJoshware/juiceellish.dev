@@ -24,10 +24,12 @@
                         <input class="form-control" id="coverImage" name="cover_image" type="file">
                     </div> -->
                     <div class="form-width m-3">
-                        <input autocomplete="off" class="form-control" name="playlist_name" type="text" value="{{ name }}">
+                        <label class="form-label text-color" for="title_input">Title</label>
+                        <input autocomplete="off" class="form-control" id="title_input" name="playlist_name" required type="text" value="{{ name }}">
                     </div>
                     <div class="form-width m-3">
-                        <textarea autocomplete="off" class="form-control" name="playlist_desc">{{ description }}</textarea>
+                        <label class="form-label text-color" for="description_input">Description</label>
+                        <textarea autocomplete="off" class="form-control" id="description_input" name="playlist_desc" required rows="3">{{ description }}</textarea>
                     </div>
                 </div>
                 <div class="w-100">
