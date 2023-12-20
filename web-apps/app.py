@@ -1,11 +1,11 @@
-import os, requests, base64, json
+import os, requests, base64 #, json
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, jsonify, render_template, request, redirect, session
+from flask import Flask, flash, jsonify, render_template, request, redirect #, session
 from flask_caching import Cache
-from flask_session import Session
+# from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
