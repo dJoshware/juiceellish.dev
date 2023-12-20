@@ -1,0 +1,95 @@
+{% extends "playlister/layout.html" %}
+
+{% block title %}
+    Edit Playlist - Playlister
+{% endblock %}
+
+{% block main %}
+    <section>
+        <div class="container-fluid d-flex flex-column align-items-center">
+            <form action="/playlister/edit/{{ name }}:{{ id }}" class="d-inline-flex flex-column justify-content-center align-items-center w-100" id="formPUT" method="POST">
+                <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
+                    <div class="d-flex my-btns">
+                        <!-- MAKE CANCEL/SAVE STICK TO TOP -->
+                        <a class="btn btn-outline-danger flex-fill m-3 my-btn" href="{{ url_for('playlister_playlist', playlist=name, id=id) }}">Cancel</a>
+                        <button class="btn btn-outline-info flex-fill m-3 my-btn" data-bs-target="#saveModal" data-bs-toggle="modal" type="button">Save</button>
+                    </div>
+                    {% if has_image == False %}
+                        <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
+                    {% else %}
+                        <img src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
+                    {% endif %}
+                    <!-- <div class="form-width m-3">
+                        <label for="coverImage" class="form-label text-color">Change Image</label>
+                        <input class="form-control" id="coverImage" name="cover_image" type="file">
+                    </div> -->
+                    <div class="form-width m-3">
+                        <label class="form-label text-color" for="title_input">Title</label>
+                        <input autocomplete="off" class="form-control" id="title_input" name="playlist_name" required type="text" value="{{ name }}">
+                    </div>
+                    <div class="form-width m-3">
+                        <label class="form-label text-color" for="description_input">Description</label>
+                        <textarea autocomplete="off" class="form-control" id="description_input" name="playlist_desc" required rows="3">{{ description }}</textarea>
+                    </div>
+                </div>
+                <div class="w-100">
+                    <hr class="my-hr">
+                </div>
+                {% if not all_tracks %}
+                    <div class="d-flex justify-content-center w-25">
+                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                    </div>
+                {% else %}
+                    <div class="d-flex flex-column w-50">
+                        <div class="d-flex flex-row my-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="selectAll">
+                                <label class="form-check-label" for="selectAll">Select All</label>
+                            </div>
+                        </div>
+                        <hr>
+                        {% for track in all_tracks %}
+                            <div class="d-flex flex-row" id="songs">
+                                <div class="d-flex flex-column justify-content-center form-check form-switch">
+                                    <input class="form-check-input" name="{{ track['track_id'] }}" type="checkbox" role="switch">
+                                </div>
+                                <img class="d-inline py-2 pe-3" src="{{ track['track_album_cover'] }}" alt="{{ track['track_name'] }} Album Cover">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <div class="d-block">{{ track['track_name'] }}</div>
+                                    <div class="d-block" id="artist">{{ track['artist_name'] }}</div>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <!-- 'Save changes' modal -->
+                <div aria-hidden="true" aria-labelledby="saveConfirmation" class="modal fade" id="saveModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="saveConfirmation">Confirmation</h1>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to save these changes?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary my-btn" data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-outline-info my-btn" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Location to send JS array to grab in app.py -->
+                <div style="position: absolute; visibility: hidden;">
+                    <input id="hiddenList" name="selectedIds" value="">
+                </div>
+                <!-- Location to send playlist id to grab in app.js -->
+                <!-- WORKS WITH IMAGE UPLOAD; IN PROGRESS -->
+                <!-- <div style="position: absolute; visibility: hidden;">
+                    <input name="playlistId" value="{{ id }}">
+                </div> -->
+            </form>
+        </div>
+    </section>
+{% endblock %}

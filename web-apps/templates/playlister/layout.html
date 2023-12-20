@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description"
-        content="Create Spotify playlists with eaze. Manually fine-tune your creation or let AI do the work for you.">
+        content="Create Spotify playlists with ease. Manually fine-tune your creation or let AI do the work for you.">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://www.juiceellish.dev">
@@ -21,18 +21,53 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/092a914cad.js" crossorigin="anonymous"></script>
+    <!-- Google Search Icon -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='playlister/styles.css') }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='playlister/images/4390.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='playlister/images/playlister_logo.svg') }}">
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='playlister/app.js') }}"></script>
 
     <title>{% block title %}{% endblock %}</title>
 </head>
-
+ 
 <body>
-    {% block main %}{% endblock %}
+    <!-- STYLE LIKE NEUMORPHISM OFFCANVAS AND ARROW -->
+    <nav class="bg-dark navbar navbar-dark d-flex">
+        <div class="container-fluid d-flex" id="logo_div">
+            <a href="/playlister/index" class="navbar-brand">
+                <img id="logo" src="{{ url_for('static', filename='playlister/images/playlister_word.svg') }}" alt="Playlister Logo">
+                <img id="beta" src="{{ url_for('static', filename='playlister/images/beta.svg') }}" alt="Beta Logo">
+            </a>
+            <div>
+                <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">
+                {{ username }}
+            </div>
+        </div>
+    </nav>
+
+    {% if get_flashed_messages() %}
+    <header>
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger mb-2 text-center" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </header>
+    {% endif %}
+
+    <main class="container-fluid text-center">
+        {% block main %}{% endblock %}
+    </main>
+    <hr class="my-hr">
+    <footer class="my-4 small text-center">
+        2023 &copy; juiceellish, LLC - Temporary footer
+    </footer>
 </body>
 
 </html>
