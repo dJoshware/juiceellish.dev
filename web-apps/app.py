@@ -106,7 +106,7 @@ def playlister_index():
     ''' Playlister app landing page. '''
 
     # Authorize user?
-    # get_spotify_token()
+    get_spotify_token()
 
     # Get user profile information to display username
     user = sp.current_user()
