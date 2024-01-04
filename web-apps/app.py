@@ -115,17 +115,20 @@ def playlister_index():
     )
 
     if request.args.get('code'):
+        print('Step 2 triggered')
         # Step 2. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get('code'))
         return redirect('/playlister/index')
     
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        print('Step 1 triggered')
         # Step 1. Display sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return f'<h2><a href="{auth_url}">Sign in</a></h2>'
     
     # Step 3. Signed in, display data
     sp = Spotify(auth_manager=auth_manager)
+    print('Step 3 triggered')
 
     # Get user profile information to display username
     user = sp.current_user()
