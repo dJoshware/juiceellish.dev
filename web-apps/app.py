@@ -1,11 +1,11 @@
-import os, requests, base64, json
+import os, requests, base64 #, json
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, jsonify, render_template, request, redirect, session
-from flask_caching import Cache
-from flask_session import Session
+from flask import Flask, flash, jsonify, render_template, request, redirect #, session
+# from flask_caching import Cache
+# from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -14,17 +14,17 @@ from spotipy.oauth2 import SpotifyOAuth
 load_dotenv()
 
 # Configure simple caching
-config = {
-    'DEBUG': True,
-    'CACHE_TYPE': 'SimpleCache',
-    'CACHE_DEFAULT_TIMEOUT': 300
-}
+# config = {
+#     'DEBUG': True,
+#     'CACHE_TYPE': 'SimpleCache',
+#     'CACHE_DEFAULT_TIMEOUT': 300
+# }
 
 # Application configurations
 app = Flask(__name__)
-app.config.from_mapping(config)
+# app.config.from_mapping(config)
 app.secret_key = os.getenv('SECRET_KEY')
-cache = Cache(app)
+# cache = Cache(app)
 # Session(app)
 
 # Constants
