@@ -124,7 +124,7 @@ def playlister_index():
     # CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
 
     # return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
-    return render_template('playlister/index.html')
+    return render_template('playlister/test.html')
 
 
 # Playlists page
