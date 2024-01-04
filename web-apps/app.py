@@ -122,7 +122,7 @@ def playlister_index():
     
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         print('Step 1 triggered')
-        # Step 1. Display sign in link if no token
+        # Step 1. Display sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return f'<h2><a href="{auth_url}">Sign in</a></h2>'
     
