@@ -75,7 +75,6 @@ def get_spotify_token():
     # }
 
     auth_options = {
-        'url': OAUTH_TOKEN_URL,
         'headers': {
             'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
         },
@@ -86,7 +85,7 @@ def get_spotify_token():
     }
 
     # res = requests.post(auth_url, headers=auth_headers, data=auth_data)
-    res = requests.post(auth_options)
+    res = requests.post(OAUTH_TOKEN_URL, data=auth_options)
     print(res)
 
     if res.status_code == 200:
