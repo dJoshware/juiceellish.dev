@@ -2,6 +2,7 @@ cachelib>=0.9.0
 Flask>=2.3.3
 Flask-Bootstrap>=3.3.7.1
 Flask-Caching>=2.0.2
+Flask-Session>=0.5.0
 Flask-SQLAlchemy>=3.0.5
 Flask-WTF>=1.1.1
 gunicorn>=21.2.0
