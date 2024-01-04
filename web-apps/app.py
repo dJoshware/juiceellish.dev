@@ -110,6 +110,7 @@ def playlister_index():
     auth_manager = SpotifyOAuth(
         scope = SCOPE,
         cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
         show_dialog = True
     )
 
