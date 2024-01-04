@@ -79,7 +79,8 @@ def get_spotify_token():
     if res.status_code == 200:
         body = res.json()
         access_token = body['access_token']
-        return access_token
+        print(access_token)
+        return redirect('/playlister/index')
     else:
         return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
     
@@ -109,20 +110,21 @@ def playlister_index():
     # get_spotify_token()
 
     # Get user profile information to display username
-    user = sp.current_user()
+    #user = sp.current_user()
 
     # Username
-    username = user['display_name']
+    #username = user['display_name']
 
     # PFPs
-    sm_image = user['images'][0]['url']
+    #sm_image = user['images'][0]['url']
     # lg_image = user['images'][1]['url']
 
     # Get user playlists
-    playlists = sp.current_user_playlists() # limit 50...
+    #playlists = sp.current_user_playlists() # limit 50...
     # CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
 
-    return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
+    # return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
+    return render_template('playlister/index.html')
 
 
 # Playlists page
