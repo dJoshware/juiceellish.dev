@@ -64,35 +64,36 @@ def get_spotify_token():
     client_id = CLIENT_ID
     client_secret = CLIENT_SECRET
 
-    # auth_url = OAUTH_TOKEN_URL
+    auth_url = OAUTH_TOKEN_URL
 
-    # auth_headers = {
-    #     'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
-    # }
-
-    # auth_data = {
-    #     'grant_type': 'client_credentials',
-    # }
-
-    auth_options = {
-        'headers': {
-            'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
-        },
-        'form': {
-            'grant_type': 'client_credentials'
-        },
-        'json': True
+    auth_headers = {
+        'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
     }
 
-    # res = requests.post(auth_url, headers=auth_headers, data=auth_data)
-    res = requests.post(OAUTH_TOKEN_URL, data=auth_options)
+    auth_data = {
+        'grant_type': 'client_credentials',
+    }
+
+    # auth_options = {
+    #     'headers': {
+    #         'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
+    #     },
+    #     'form': {
+    #         'grant_type': 'client_credentials'
+    #     },
+    #     'json': True
+    # }
+
+    res = requests.post(auth_url, headers=auth_headers, data=auth_data)
+    # res = requests.post(OAUTH_TOKEN_URL, data=auth_options)
     print(res)
 
     if res.status_code == 200:
         body = res.json()
         access_token = body['access_token']
         print(access_token)
-        return redirect('/playlister/index')
+        # return redirect('/playlister/index')
+        return access_token
     else:
         return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
     
