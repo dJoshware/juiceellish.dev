@@ -3,12 +3,12 @@ import os, requests, base64 #, json
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, jsonify, render_template, request, redirect #, session
+from flask import Flask, flash, jsonify, render_template, request, redirect, session
 # from flask_caching import Cache
-# from flask_session import Session
+from flask_session import Session
 from spotipy import Spotify
-# from spotipy.oauth2 import SpotifyOAuth
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyOAuth
+from spotipy.cache_handler import FlaskSessionCacheHandler
 
 
 # Load environment variables
@@ -26,7 +26,7 @@ app = Flask(__name__)
 # app.config.from_mapping(config)
 app.secret_key = os.getenv('SECRET_KEY')
 # cache = Cache(app)
-# Session(app)
+Session(app)
 
 # Constants
 OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize?'
@@ -56,9 +56,7 @@ params = {
 #     show_dialog=True
 # )
 
-oauth = SpotifyClientCredentials()
-
-sp = Spotify(auth_manager=oauth)
+# sp = Spotify(auth_manager=oauth)
 
 
 # GET ACCESS TOKEN FOR SPOTIFY
@@ -108,8 +106,27 @@ def home():
 def playlister_index():
     ''' Playlister app landing page. '''
 
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        show_dialog = True
+    )
+
+    if request.args.get('code'):
+        # Step 2. Being redirected from Spotify auth page
+        auth_manager.get_access_token(request.args.get('code'))
+        return redirect('/playlister/index')
+    
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign in link when no token
+        auth_url = auth_manager.get_authorize_url()
+        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
+    
+    # Step 3. Signed in, display data
+    sp = Spotify(auth_manager=auth_manager)
+
     # Get user profile information to display username
-    print('Loaded /playlister/index route successfully...')
     user = sp.current_user()
 
     # Username
