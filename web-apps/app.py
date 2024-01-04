@@ -62,24 +62,32 @@ sp = Spotify(auth_manager=oauth)
 @app.route('/playlister/get_spotify_token', methods=['GET', 'POST'])
 def get_spotify_token():
     client_id = CLIENT_ID
-    print(f'Client ID: {client_id}')
     client_secret = CLIENT_SECRET
-    print(f'Client Secret: {client_secret}')
 
-    auth_headers = {
-        'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
+    # auth_url = OAUTH_TOKEN_URL
+
+    # auth_headers = {
+    #     'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
+    # }
+
+    # auth_data = {
+    #     'grant_type': 'client_credentials',
+    # }
+
+    auth_options = {
+        'url': OAUTH_TOKEN_URL,
+        'headers': {
+            'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
+        },
+        'form': {
+            'grant_type': 'client_credentials'
+        },
+        'json': True
     }
-    print(f'Authorization Headers: {auth_headers}')
 
-    auth_data = {
-        'grant_type': 'client_credentials',
-    }
-    print(f'Authorization Data: {auth_data}')
-
-    auth_url = OAUTH_TOKEN_URL
-    print(f'Authorization URL: {auth_url}')
-
-    res = requests.post(auth_url, headers=auth_headers, data=auth_data)
+    # res = requests.post(auth_url, headers=auth_headers, data=auth_data)
+    res = requests.post(auth_options)
+    print(res)
 
     if res.status_code == 200:
         body = res.json()
