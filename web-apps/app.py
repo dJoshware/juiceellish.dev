@@ -110,21 +110,21 @@ def playlister_index():
     # get_spotify_token()
 
     # Get user profile information to display username
-    #user = sp.current_user()
+    print('Loaded /playlister/index route successfully...')
+    user = sp.current_user()
 
     # Username
-    #username = user['display_name']
+    username = user['display_name']
 
     # PFPs
-    #sm_image = user['images'][0]['url']
+    sm_image = user['images'][0]['url']
     # lg_image = user['images'][1]['url']
 
     # Get user playlists
-    #playlists = sp.current_user_playlists() # limit 50...
-    # CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
+    playlists = sp.current_user_playlists() # limit 50...
+    #NOTE CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
 
-    # return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
-    return render_template('playlister/test.html')
+    return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
 
 
 # Playlists page
