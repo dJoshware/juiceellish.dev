@@ -86,14 +86,11 @@ def get_spotify_token():
 
     res = requests.post(auth_url, headers=auth_headers, data=auth_data)
     # res = requests.post(OAUTH_TOKEN_URL, data=auth_options)
-    print(res)
 
     if res.status_code == 200:
         body = res.json()
         access_token = body['access_token']
-        print(access_token)
-        # return redirect('/playlister/index')
-        return access_token
+        return redirect('/playlister/index')
     else:
         return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
     
