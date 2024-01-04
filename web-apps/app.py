@@ -7,7 +7,8 @@ from flask import Flask, flash, jsonify, render_template, request, redirect #, s
 # from flask_caching import Cache
 # from flask_session import Session
 from spotipy import Spotify
-from spotipy.oauth2 import SpotifyOAuth
+# from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 # Load environment variables
@@ -46,14 +47,16 @@ params = {
             'show_dialog': True
         }
 
-oauth = SpotifyOAuth(
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    redirect_uri=REDIRECT_URI,
-    state=STATE,
-    scope=SCOPE,
-    show_dialog=True
-)
+# oauth = SpotifyOAuth(
+#     client_id=CLIENT_ID,
+#     client_secret=CLIENT_SECRET,
+#     redirect_uri=REDIRECT_URI,
+#     state=STATE,
+#     scope=SCOPE,
+#     show_dialog=True
+# )
+
+oauth = SpotifyClientCredentials()
 
 sp = Spotify(auth_manager=oauth)
 
@@ -74,18 +77,7 @@ def get_spotify_token():
         'grant_type': 'client_credentials',
     }
 
-    # auth_options = {
-    #     'headers': {
-    #         'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
-    #     },
-    #     'form': {
-    #         'grant_type': 'client_credentials'
-    #     },
-    #     'json': True
-    # }
-
     res = requests.post(auth_url, headers=auth_headers, data=auth_data)
-    # res = requests.post(OAUTH_TOKEN_URL, data=auth_options)
 
     if res.status_code == 200:
         body = res.json()
