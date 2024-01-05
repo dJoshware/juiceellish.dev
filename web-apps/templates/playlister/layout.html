@@ -45,8 +45,9 @@
                 <img id="beta" src="{{ url_for('static', filename='playlister/images/beta.svg') }}" alt="Beta Logo">
             </a>
             <div>
-                <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">
-                {{ username }}
+                {% if sm_image and username %}
+                    <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">{{ username }}
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -66,7 +67,7 @@
     </main>
     <hr class="my-hr">
     <footer class="my-4 small text-center">
-        2023 &copy; juiceellish, LLC - Temporary footer
+        2024 &copy; juiceellish
     </footer>
 </body>
 
