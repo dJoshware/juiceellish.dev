@@ -1,9 +1,9 @@
-import os, requests, base64 #, json
+import os
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, jsonify, render_template, request, redirect, session
+from flask import Flask, flash, render_template, request, redirect, session
 # from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
@@ -13,13 +13,6 @@ from spotipy.cache_handler import FlaskSessionCacheHandler
 
 # Load environment variables
 load_dotenv()
-
-# Configure simple caching
-# config = {
-#     'DEBUG': True,
-#     'CACHE_TYPE': 'SimpleCache',
-#     'CACHE_DEFAULT_TIMEOUT': 300
-# }
 
 # Application configurations
 app = Flask(__name__)
@@ -58,32 +51,6 @@ params = {
 # )
 
 # sp = Spotify(auth_manager=oauth)
-
-
-# GET ACCESS TOKEN FOR SPOTIFY
-@app.route('/playlister/get_spotify_token', methods=['GET', 'POST'])
-def get_spotify_token():
-    client_id = CLIENT_ID
-    client_secret = CLIENT_SECRET
-
-    auth_url = OAUTH_TOKEN_URL
-
-    auth_headers = {
-        'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
-    }
-
-    auth_data = {
-        'grant_type': 'client_credentials',
-    }
-
-    res = requests.post(auth_url, headers=auth_headers, data=auth_data)
-
-    if res.status_code == 200:
-        body = res.json()
-        access_token = body['access_token']
-        return redirect('/playlister/index')
-    else:
-        return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
     
 
 # PORTFOLIO ROUTES
