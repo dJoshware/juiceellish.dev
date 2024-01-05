@@ -36,7 +36,7 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
  
-<body>
+<body class="h-100">
     <!-- STYLE LIKE NEUMORPHISM OFFCANVAS AND ARROW -->
     <nav class="bg-dark navbar navbar-dark d-flex">
         <div class="container-fluid d-flex" id="logo_div">
@@ -44,11 +44,11 @@
                 <img id="logo" src="{{ url_for('static', filename='playlister/images/playlister_word.svg') }}" alt="Playlister Logo">
                 <img id="beta" src="{{ url_for('static', filename='playlister/images/beta.svg') }}" alt="Beta Logo">
             </a>
-            <div>
-                {% if sm_image and username %}
+            {% if sm_image and username %}
+                <div>
                     <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">{{ username }}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
         </div>
     </nav>
 
