@@ -29,7 +29,7 @@ app.secret_key = os.getenv('SECRET_KEY')
 Session(app)
 
 # Constants
-OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize?'
+OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
 OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
