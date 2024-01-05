@@ -24,7 +24,8 @@ load_dotenv()
 # Application configurations
 app = Flask(__name__)
 # app.config.from_mapping(config)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv('SECRET_KEY')
+app.config['SESSION_TYPE'] = 'filesystem'
 # cache = Cache(app)
 Session(app)
 
