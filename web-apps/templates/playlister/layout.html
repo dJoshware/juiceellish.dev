@@ -45,8 +45,13 @@
                 <img id="beta" src="{{ url_for('static', filename='playlister/images/beta.svg') }}" alt="Beta Logo">
             </a>
             {% if sm_image and username %}
-                <div>
-                    <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">{{ username }}
+                <div class="dropdown">
+                    <button aria-expanded="false" class="dropdown-toggle" data-bs-toggle="dropdown" type="button">
+                        <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">{{ username }}
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('sign_out') }}">Sign out</a></li>
+                        </ul>
+                    </button>
                 </div>
             {% endif %}
         </div>
