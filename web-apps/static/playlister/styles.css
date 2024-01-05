@@ -11,12 +11,16 @@
     --logo-blue: #54E1FA;
     --text-color: #F8F9FA;
 }
+html {
+    height: 100%;
+}
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
+    display: flex;
+    flex-direction: column;
     font-family: 'bryant', sans-serif;
     font-weight: 300;
-    height: 100%;
     letter-spacing: .08rem;
 }
 hr {
