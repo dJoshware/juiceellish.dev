@@ -102,19 +102,17 @@ def playlister_index():
     user = sp.current_user()
 
     # Username
-    if user['display_name']:
-        username = user['display_name']
-        print(username)
-    else:
+    if not user['display_name']:
         username = 'User'
-        print(username)
+    else:
+        username = user['display_name']
 
     # User profile picture
-    if user['images'][0]['url']:
-        sm_image = user['images'][0]['url']
+    if not user['images'][0]['url']:
+        sm_image = None
         print(sm_image)
     else:
-        sm_image = None
+        sm_image = user['images'][0]['url']
         print(sm_image)
 
     # Get user playlists
