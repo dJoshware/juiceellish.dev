@@ -109,7 +109,7 @@ def playlister_index():
 
     # User profile picture
     if not user['images']:
-        sm_image = 'static/playlister/images/playlist-cover.png'
+        sm_image = 'static/playlister/images/pfp.png'
     else:
         sm_image = user['images'][0]['url']
 
