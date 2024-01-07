@@ -100,6 +100,7 @@ def playlister_index():
 
     # Get user profile information to display username
     user = sp.current_user()
+    print(user)
 
     # Username
     if not user['display_name']:
