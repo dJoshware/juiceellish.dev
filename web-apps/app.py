@@ -109,7 +109,7 @@ def playlister_index():
         username = user['display_name']
 
     # User profile picture
-    if not user['images'][0]['url']:
+    if not user['images']:
         sm_image = None
         print(sm_image)
     else:
