@@ -46,9 +46,9 @@
             </a>
             {% if sm_image and username %}
                 <div class="dropdown">
-                    <button aria-expanded="false" class="dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                        <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">{{ username }}
-                        <ul class="dropdown-menu">
+                    <button aria-expanded="false" class="d-flex dropdown-toggle flex-row align-items-center text-color" data-bs-toggle="dropdown" type="button">
+                        <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block my-auto">{{ username }}
+                        <ul class="btn-outline-info dropdown-menu dropdown-menu-end text-center">
                             <li><a class="dropdown-item" href="{{ url_for('sign_out') }}">Sign out</a></li>
                         </ul>
                     </button>
