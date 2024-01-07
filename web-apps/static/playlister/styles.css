@@ -132,23 +132,14 @@ hr {
     outline: none;
 }
 .dropdown-toggle {
-    background-color: transparent;
-    border: transparent;
     letter-spacing: 1px;
     margin: 1rem;
-    outline: transparent;
+    text-decoration: none;
 }
 .dropdown-menu {
     background-color: transparent;
     border: 1px solid var(--logo-blue);
     color: var(--text-color);
-}
-.dropdown-item {
-    color: var(--text-color);
-}
-.dropdown-item:hover {
-    background-color: var(--logo-blue);
-    color: var(--bg-color);
 }
 
 /* MOBILE DEFAULTS GO BELOW, EVERYTHING ELSE GOES OUTSIDE OF IT */
