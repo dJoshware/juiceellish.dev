@@ -3,7 +3,7 @@ import os
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, render_template, request, redirect, session
+from flask import Flask, flash, render_template, request, redirect, session, url_for
 # from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
@@ -109,7 +109,7 @@ def playlister_index():
 
     # User profile picture
     if not user['images']:
-        sm_image = 'static/playlister/images/pfp.png'
+        sm_image = url_for('static', filename='playlister/images/pfp.png')
     else:
         sm_image = user['images'][0]['url']
 
