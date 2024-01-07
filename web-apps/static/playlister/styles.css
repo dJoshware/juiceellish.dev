@@ -38,13 +38,13 @@ hr {
     position: relative;
 }
 #logo_div #logo {
-    height: 100px;
+    height: 75px;
 }
 #logo_div #beta {
-    height: 0.625rem;
-    left: 13.75rem;
+    height: 0.5rem;
+    left: 10.5rem;
     position: absolute;
-    top: 4.375rem;
+    top: 3.65rem;
 }
 .btn-outline-info {
     border-color: var(--logo-blue);
@@ -144,19 +144,5 @@ hr {
 
 /* MOBILE DEFAULTS GO BELOW, EVERYTHING ELSE GOES OUTSIDE OF IT */
 @media screen and (min-width: 768px) {
-    #logo_div #logo {
-        height: 150px;
-    }
-    #logo_div #beta {
-        height: 1rem;
-        left: 20rem;
-        top: 6.25rem;
-    }
-    .modal-content {
-        background-color: var(--bg-color) !important;
-        color: var(--text-color) !important;
-    }
-    .form-check-input:checked {
-        background-color: var(--logo-blue);
-    }
+    
 }
