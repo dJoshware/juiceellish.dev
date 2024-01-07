@@ -100,7 +100,6 @@ def playlister_index():
 
     # Get user profile information to display username
     user = sp.current_user()
-    print(user)
 
     # Username
     if not user['display_name']:
@@ -110,11 +109,9 @@ def playlister_index():
 
     # User profile picture
     if not user['images']:
-        sm_image = None
-        print(sm_image)
+        sm_image = 'static/playlister/images/playlist-cover.png'
     else:
         sm_image = user['images'][0]['url']
-        print(sm_image)
 
     # Get user playlists
     playlists = sp.current_user_playlists() # limit 50...
