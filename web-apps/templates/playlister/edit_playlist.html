@@ -36,8 +36,8 @@
                     <hr class="my-hr">
                 </div>
                 {% if not all_tracks %}
-                    <div class="d-flex justify-content-center .add-to-playlist pb-2">
-                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                    <div class="d-flex justify-content-center .add-to-playlist">
+                        <a class="btn btn-light" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                     </div>
                 {% else %}
                     <div class="d-flex flex-column song-list">

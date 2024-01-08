@@ -1,9 +1,5 @@
 @import url("https://use.typekit.net/nbg5qht.css");
 
-* {
-    margin: 0;
-    padding: 0;
-}
 /* NEW BLUE: #00B8FC */
 /* NEW BLACK: #202124 */
 :root {
@@ -22,9 +18,6 @@ body {
     font-family: 'bryant', sans-serif;
     font-weight: 300;
     letter-spacing: .08rem;
-}
-hr {
-    margin: 0;
 }
 .text-color {
     color: var(--text-color);
@@ -57,7 +50,8 @@ hr {
 .my-hr {
     border-top: 2px solid var(--logo-blue);
     border-radius: 5px;
-    margin: .5rem;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
     opacity: 1;
 }
 .col {
@@ -134,7 +128,6 @@ hr {
 .add-btn {
     background-color: transparent;
     border: none;
-    /* color: var(--bg-color); */
     outline: none;
 }
 .dropdown-toggle {
@@ -167,12 +160,6 @@ hr {
     .btn-outline-info:hover {
         background-color: var(--logo-blue);
         color: var(--bg-color);
-    }
-    .my-hr {
-        border-top: 2px solid var(--logo-blue);
-        border-radius: 5px;
-        margin: .5rem;
-        opacity: 1;
     }
     .col {
         padding: 0;
