@@ -3,12 +3,13 @@ import os
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, render_template, request, redirect, session, url_for
+from flask import Flask, flash, get_flashed_messages, render_template, request, redirect, session, url_for
 # from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import FlaskSessionCacheHandler
+import time
 
 
 # Load environment variables
@@ -500,7 +501,8 @@ def playlister_search(id):
                     # Increase offset of spotipy's 'search' function to iterate over all of artist's albums
                     offset += len(albums)
                     if offset == 1000: # app breaks without this
-                        break
+                        flash("ERROR: Request timed out")
+                        return redirect(f'/playlister/search:{playlist_id}')
                 # Create new empty dictionary for sorted albums
                 album_dict = {}
                 # Loop over first empty list after it's filled
@@ -528,13 +530,11 @@ def playlister_search(id):
                 sorted_albums = sorted(album_dict.values(), key=lambda x: (x['album_type'] == 'album', x['release_date'], x['album_name'], x['album_id'], x['total_tracks']), reverse=True)
             else:
                 # If artist search query is incomplete
-                flash("ERROR: Unfinished query")
-                flash("Please provide an artist's full name.")
+                flash("ERROR: Unfinished query. Please provide an artist's full name.")
                 return redirect(f'/playlister/search:{playlist_id}')
         else:
             # If user doesn't type anything
-            flash("ERROR: No input")
-            flash("Please provide an artist's full name.")
+            flash("ERROR: No input. Please provide an artist's full name.")
             return redirect(f'/playlister/search:{playlist_id}')
 
 

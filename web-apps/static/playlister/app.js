@@ -63,6 +63,11 @@ $(document).ready(function() {
         return false;
     });
 
+    $('.bi-x').on('click', function(e) {
+        e.preventDefault();
+        $(this).parent().remove();
+    })
+
     // Setup 'PUT' request for custom cover image
     // NEEDS WORK
     // $('#formPUT').on('submit', function(e) {
