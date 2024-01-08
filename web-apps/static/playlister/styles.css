@@ -19,6 +19,9 @@ body {
     font-weight: 300;
     letter-spacing: .08rem;
 }
+hr {
+    margin: 0;
+}
 .text-color {
     color: var(--text-color);
 }
@@ -69,6 +72,7 @@ body {
     width: 250px;
 }
 .add-to-playlist {
+    margin: .5rem 0;
     width: 181px;
 }
 .song-list {
@@ -130,15 +134,31 @@ body {
     border: none;
     outline: none;
 }
+.add-btn:active {
+    opacity: .5;
+    transform: scale(.9);
+}
 .dropdown-toggle {
-    letter-spacing: 1px;
     margin: 1rem;
     text-decoration: none;
 }
 .dropdown-menu {
-    background-color: transparent;
-    border: 1px solid var(--logo-blue);
-    color: var(--text-color);
+    background-color: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.dropdown-item {
+    color: var(--text-color) !important;
+    margin: 0.25rem 0 !important;
+    padding: 0 !important;
+}
+.dropdown-menu:hover {
+    background-color: var(--logo-blue) !important;
+    color: var(--bg-color) !important;
+}
+.dropdown-item:hover {
+    background-color: transparent !important;
+    color: var(--bg-color) !important;
 }
 #playlist_cover {
     height: 250px;
@@ -150,19 +170,21 @@ body {
 .search-btn {
     width: 450px;
 }
+.btn:active {
+    opacity: .5;
+    transform: scale(.9);
+}
 
 /* Styles for non-mobile devices */
 @media screen and (min-width: 768px) {
-    .btn-outline-info {
-        border-color: var(--logo-blue);
-        color: var(--text-color);
+    #logo_div #logo {
+        height: 100px;
     }
-    .btn-outline-info:hover {
-        background-color: var(--logo-blue);
-        color: var(--bg-color);
-    }
-    .col {
-        padding: 0;
+    #logo_div #beta {
+        height: .7rem;
+        left: 13.5rem;
+        position: absolute;
+        top: 4.25rem;
     }
     .form-width {
         color: var(--bg-color);
@@ -170,73 +192,6 @@ body {
     }
     .my-btn {
         width: 100px !important;
-    }
-    #card {
-        border: none;
-        color: var(--text-color);
-        outline: none;
-    }
-    #card .card-title {
-        margin: 0;
-    }
-    #songs {
-        background-color: var(--bg-color);
-        text-align: left;
-    }
-    #artist {
-        font-size: .8125rem;
-        color: #aeaeae;
-    }
-    .modal-content {
-        background-color: var(--bg-color) !important;
-        color: var(--text-color) !important;
-    }
-    .form-check-input:checked {
-        background-color: var(--logo-blue);
-    }
-    #accordionParent {
-        background-color: var(--logo-blue);
-    }
-    .accordion-item {
-        background-color: var(--bg-color);
-        border-color: var(--logo-blue);
-        color: var(--text-color);
-    }
-    .accordion-button:focus {
-        border-color: var(--logo-blue);
-        box-shadow: none;
-    }
-    .accordion-button.collapsed {
-        /* background-color: rgb(82, 224, 250, .7); */
-        background-color: var(--bg-color);
-        color: var(--text-color);
-    }
-    .accordion-button:not(.collapsed) {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-    }
-    .accordion-button:not(.collapsed)::after {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23F8F9FA'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");;
-    }
-    .accordion-button::after {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23F8F9FA'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");;
-        color: var(--text-color);
-    }
-    .add-btn {
-        background-color: transparent;
-        border: none;
-        /* color: var(--bg-color); */
-        outline: none;
-    }
-    .dropdown-toggle {
-        letter-spacing: 1px;
-        margin: 1rem;
-        text-decoration: none;
-    }
-    .dropdown-menu {
-        background-color: transparent;
-        border: 1px solid var(--logo-blue);
-        color: var(--text-color);
     }
     #playlist_cover {
         height: 400px;
