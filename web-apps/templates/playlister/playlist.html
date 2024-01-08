@@ -7,17 +7,17 @@
 {% block main %}
     <section>
         <div class="container-fluid d-flex flex-column align-items-center">
-            <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
+            <div class="d-inline-flex flex-column justify-content-center align-items-center w-75">
                 {% if has_image == False %}
-                    <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
+                    <img id="playlist_cover" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image">
                 {% else %}
-                    <img src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
+                    <img id="playlist_cover" src="{{ image }}" alt="Cover Image: {{ name }}">
                 {% endif %}
-                <div class="d-flex my-btns">
+                <div class="d-flex flex-row justify-content-center my-btns">
                     {% if owner == username %}
-                        <a href="{{ url_for('edit_playlist', playlist=name, id=id) }}" class="btn btn-outline-info flex-fill m-3 my-btn">Edit</a>
+                        <a href="{{ url_for('edit_playlist', playlist=name, id=id) }}" class="btn btn-outline-info m-3 my-btn">Edit</a>
                     {% endif %}
-                    <button class="btn btn-outline-danger flex-fill m-3 my-btn" data-bs-target="#deleteModal" data-bs-toggle="modal" type="button">
+                    <button class="btn btn-outline-danger m-3 my-btn" data-bs-target="#deleteModal" data-bs-toggle="modal" type="button">
                         {% if owner == username %}
                             Delete
                         {% else %}
@@ -59,19 +59,19 @@
                 <div class="w-100">
                     <hr class="my-hr">
                 </div>
-                <div class="d-flex justify-content-center w-25">
-                    <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                <div class="d-flex justify-content-center pb-2">
+                    <a class="btn btn-light add-to-playlist" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                 </div>
             {% else %}
                 {% if owner == username %}
-                    <div class="d-flex justify-content-center w-25">
-                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                    <div class="d-flex justify-content-center pb-2">
+                        <a class="btn btn-light add-to-playlist" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                     </div>
                 {% endif %}
                 <div class="w-100">
                     <hr class="my-hr">
                 </div>
-                <div class="d-flex flex-column w-50">
+                <div class="d-flex flex-column song-list">
                     {% for track in all_tracks %}
                         <div class="d-flex flex-row" id="songs">
                             <img class="d-inline py-2 pe-3" src="{{ track['track_album_cover'] }}" alt="{{ track['track_name'] }} Album Cover">

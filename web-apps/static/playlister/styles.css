@@ -44,7 +44,7 @@ hr {
     height: 0.5rem;
     left: 10.5rem;
     position: absolute;
-    top: 3.65rem;
+    top: 3.35rem;
 }
 .btn-outline-info {
     border-color: var(--logo-blue);
@@ -68,11 +68,17 @@ hr {
     width: 18.75rem;
 }
 .my-btn {
-    width: 100px !important;
+    width: 90px !important;
 }
 .my-btns {
     margin: 1rem !important;
     width: 250px;
+}
+.add-to-playlist {
+    width: 181px;
+}
+.song-list {
+    width: 100%;
 }
 #card {
     border: none;
@@ -141,8 +147,121 @@ hr {
     border: 1px solid var(--logo-blue);
     color: var(--text-color);
 }
+#playlist_cover {
+    height: 250px;
+    width: 250px;
+}
+#mainAccordion {
+    width: 350px;
+}
+.search-btn {
+    width: 450px;
+}
 
-/* MOBILE DEFAULTS GO BELOW, EVERYTHING ELSE GOES OUTSIDE OF IT */
+/* Styles for non-mobile devices */
 @media screen and (min-width: 768px) {
-    
+    .btn-outline-info {
+        border-color: var(--logo-blue);
+        color: var(--text-color);
+    }
+    .btn-outline-info:hover {
+        background-color: var(--logo-blue);
+        color: var(--bg-color);
+    }
+    .my-hr {
+        border-top: 2px solid var(--logo-blue);
+        border-radius: 5px;
+        margin: .5rem;
+        opacity: 1;
+    }
+    .col {
+        padding: 0;
+    }
+    .form-width {
+        color: var(--bg-color);
+        width: 18.75rem;
+    }
+    .my-btn {
+        width: 100px !important;
+    }
+    #card {
+        border: none;
+        color: var(--text-color);
+        outline: none;
+    }
+    #card .card-title {
+        margin: 0;
+    }
+    #songs {
+        background-color: var(--bg-color);
+        text-align: left;
+    }
+    #artist {
+        font-size: .8125rem;
+        color: #aeaeae;
+    }
+    .modal-content {
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+    }
+    .form-check-input:checked {
+        background-color: var(--logo-blue);
+    }
+    #accordionParent {
+        background-color: var(--logo-blue);
+    }
+    .accordion-item {
+        background-color: var(--bg-color);
+        border-color: var(--logo-blue);
+        color: var(--text-color);
+    }
+    .accordion-button:focus {
+        border-color: var(--logo-blue);
+        box-shadow: none;
+    }
+    .accordion-button.collapsed {
+        /* background-color: rgb(82, 224, 250, .7); */
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    .accordion-button:not(.collapsed)::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23F8F9FA'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");;
+    }
+    .accordion-button::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23F8F9FA'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");;
+        color: var(--text-color);
+    }
+    .add-btn {
+        background-color: transparent;
+        border: none;
+        /* color: var(--bg-color); */
+        outline: none;
+    }
+    .dropdown-toggle {
+        letter-spacing: 1px;
+        margin: 1rem;
+        text-decoration: none;
+    }
+    .dropdown-menu {
+        background-color: transparent;
+        border: 1px solid var(--logo-blue);
+        color: var(--text-color);
+    }
+    #playlist_cover {
+        height: 400px;
+        width: 400px;
+    }
+    .song-list {
+        width: 50%;
+    }
+    #mainAccordion {
+        width: 400px;
+    }
+    .search-btn {
+        width: 500px;
+    }
 }
