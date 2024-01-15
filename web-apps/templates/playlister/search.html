@@ -47,11 +47,11 @@
                         <button class="btn btn-outline-info" id="button-addon2" type="submit">Search</button>
                     </div>
                 </div>
-                {% if not sorted_albums %}
+                {% if not search_data %}
                     <div class="d-flex justify-content-center"></div>
                 {% else %}
                     <div class="accordion mb-3" id="accordionParent">
-                        {% for album in sorted_albums %}
+                        {% for album in search_data %}
                             {% if album['album_type'] == 'album' or album['total_tracks'] > 1 %}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header d-flex flex-row">
@@ -60,7 +60,7 @@
                                     </h2>
                                     <div class="accordion-collapse collapse" data-bs-parent="#accordionParent" id="{{ album['album_id'] }}">
                                         <div class="accordion-body d-flex flex-column justify-content-center py-2 ps-2 pe-0" id="songs">
-                                            {% for song in get_album(album['album_id']) %}
+                                            {% for song in album['songs'] %}
                                                 <div class="d-flex flex-row align-items-center">
                                                     <img class="d-inline p-2" src="{{ song['song_image'] }}" alt="{{ song['song_image'] }} Cover Image" height="64" width="64">
                                                     <div class="d-flex flex-column justify-content-center">
@@ -78,11 +78,11 @@
                                 </div>
                                 <hr>
                             {% else %}
-                                {% for song in get_album(album['album_id']) %}
+                                {% for song in album['songs'] %}
                                     <div class="d-flex flex-row" id="songs">
-                                        <img class="d-inline p-2" src="{{ album['album_cover_image'] }}" alt="{{ album['album_name'] }} Album Cover">
+                                        <img class="d-inline p-2" src="{{ song['song_image'] }}" alt="{{ song['song_name'] }} Album Cover">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <div class="d-block px-2">{{ album['album_name'] }}</div>
+                                            <div class="d-block px-2">{{ song['song_name'] }}</div>
                                         </div>
                                         <button class="add-btn ms-auto" name="{{ id }}" type="button" value="{{ song['song_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>

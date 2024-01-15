@@ -1,9 +1,9 @@
-import os
+import os, json
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, get_flashed_messages, render_template, request, redirect, session, url_for
+from flask import Flask, flash, render_template, request, redirect, session, url_for
 # from flask_caching import Cache
 from flask_session import Session
 from spotipy import Spotify
@@ -409,7 +409,7 @@ def playlister_search(id):
     # Create spotipy object
     sp = Spotify(auth_manager=auth_manager)
 
-    # Call in template to get songs for each album
+    # Function to get songs for each album
     def get_album(id):
         ''' Return songs of an album. '''
 
@@ -424,6 +424,33 @@ def playlister_search(id):
             }
             all_songs.append(song)
         return all_songs
+    
+    # Function to create data for HTML template
+    def prepare_search_data(sorted_albums):
+        search_data = []
+
+        for album in sorted_albums:
+            album_data = {
+                'album_name': album['album_name'],
+                'album_id': album['album_id'],
+                'album_cover_image': album['album_cover_image'],
+                'album_type': album['album_type'],
+                'total_tracks': album['total_tracks'],
+                'songs': []
+            }
+
+            # if album['album_type'] == 'album' or album['total_tracks'] > 1:
+            for song in get_album(album['album_id']):
+                song_data = {
+                    'song_image': song['song_image'],
+                    'song_name': song['song_name'],
+                    'song_id': song['song_id']
+                }
+                album_data['songs'].append(song_data)
+
+            search_data.append(album_data)
+    
+        return search_data
 
     # Get id for flask error messaging redirection
     playlist_id = id
@@ -457,7 +484,7 @@ def playlister_search(id):
     
     # Empty list to send to template
     sorted_albums = []
-
+    
     if request.method == 'POST':
         # Takes search query from user in search bar
         query = request.form.get('search_bar').strip()
@@ -471,14 +498,15 @@ def playlister_search(id):
             # If the search result name and user query match, continues
             if artist_name == query.lower():
                 # Empty list to append album details to
+                limit = 50
                 offset = 0
                 all_artist_albums = []
                 # Loop over details of artist albums to generate new list to use in search.html
                 while True:
                     # Using user's query, return a list of the artist's albums
-                    artist_albums = sp.search(q=query, type='album', offset=offset)
+                    artist_albums = sp.search(q=query, limit=limit, offset=offset, type='album')
                     albums = artist_albums['albums']['items']
-                    
+
                     if not albums:
                         break # If nothing returned
 
@@ -502,7 +530,8 @@ def playlister_search(id):
                     offset += len(albums)
                     if offset == 1000: # app breaks without this
                         flash("ERROR: Request timed out")
-                        return redirect(f'/playlister/search:{playlist_id}')
+                        # return redirect(f'/playlister/search:{playlist_id}')
+                        break
                 # Create new empty dictionary for sorted albums
                 album_dict = {}
                 # Loop over first empty list after it's filled
@@ -536,9 +565,11 @@ def playlister_search(id):
             # If user doesn't type anything
             flash("ERROR: No input. Please provide an artist's full name.")
             return redirect(f'/playlister/search:{playlist_id}')
+        
+    search_data = prepare_search_data(sorted_albums)
 
 
-    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, sorted_albums=sorted_albums, get_album=get_album)
+    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, search_data=search_data)
 
 
 @app.route('/playlister/add_to_playlist/<playlist>:<id>')

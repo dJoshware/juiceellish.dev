@@ -10,7 +10,9 @@ body {
     background-color: #1d1d1f;
     color: #f5f5f7;
 }
-
+canvas {
+    border: 1px solid black;
+}
 p {
     line-height: 1.5rem;
 }
@@ -32,7 +34,6 @@ p {
     50% { opacity: 1; }
     100% { opacity: 0; }
 }
-
 .container {
     display: flex;
     flex-direction: column;
