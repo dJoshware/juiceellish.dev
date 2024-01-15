@@ -12,9 +12,9 @@
     </section>
     <hr class="my-hr my-4">
     <section>
-        {% if not playlists %}
-            <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-                No playlists yet
+        {% if not playlists['items'] %}
+            <div>
+                <h3>No playlists yet...</h3>
             </div>
         {% else %}
             <div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
@@ -28,7 +28,6 @@
                                 <img src="{{ playlist['images'][0]['url'] }}" alt="Cover Image: {{ playlist['name'] }}" height="300" width="300">
                             {% endif %}
                         </a>
-                        <!-- SIZE DEPENDS ON DEVICE; DESIGN FOR MOBILE -->
                         <div class="card-body mb-5">
                             <h5 class="card-title">{{ playlist['name'] }}</h5>
                         </div>
