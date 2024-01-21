@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description"
-        content="Create Spotify playlists with ease. Manually fine-tune your creation or let AI do the work for you.">
+        content="Create Spotify playlists with ease.">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://www.juiceellish.dev">
@@ -37,17 +37,22 @@
 </head>
  
 <body>
-    <!-- STYLE LIKE NEUMORPHISM OFFCANVAS AND ARROW -->
-    <nav class="bg-dark navbar navbar-dark d-flex">
+    <nav class="bg-dark navbar navbar-dark d-flex mb-5">
         <div class="container-fluid d-flex" id="logo_div">
             <a href="/playlister/index" class="navbar-brand">
                 <img id="logo" src="{{ url_for('static', filename='playlister/images/playlister_word.svg') }}" alt="Playlister Logo">
                 <img id="beta" src="{{ url_for('static', filename='playlister/images/beta.svg') }}" alt="Beta Logo">
             </a>
-            <div>
-                <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block">
-                {{ username }}
-            </div>
+            {% if sm_image and username %}
+                <div class="dropdown">
+                    <a aria-expanded="false" class="d-flex dropdown-toggle flex-row align-items-center text-color" data-bs-toggle="dropdown" href="#" role="button" type="button">
+                        <img id="pfp" src="{{ sm_image }}" alt="{{ username }} Profile Picture" class="d-inline-block my-auto" height="40" width="40">{{ username }}
+                    </a>
+                    <div class="btn btn-outline-info dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item text-center" href="{{ url_for('sign_out') }}">Sign out</a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </nav>
 
@@ -56,6 +61,9 @@
         {% for message in get_flashed_messages() %}
             <div class="alert alert-danger mb-2 text-center" role="alert">
                 {{ message }}
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                  </svg>
             </div>
         {% endfor %}
     </header>
@@ -64,9 +72,11 @@
     <main class="container-fluid text-center">
         {% block main %}{% endblock %}
     </main>
-    <hr class="my-hr">
+    <div class="w-100">
+        <hr class="my-hr mx-4">
+    </div>
     <footer class="my-4 small text-center">
-        2023 &copy; juiceellish, LLC - Temporary footer
+        Powered by <a href="https://open.spotify.com/" target="_blank"><img height="35" src="{{ url_for('static', filename='playlister/images/Spotify_Logo.png') }}" alt="Spotify Logo"></a>
     </footer>
 </body>
 

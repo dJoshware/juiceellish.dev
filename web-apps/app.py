@@ -1,35 +1,30 @@
-import os, requests, base64 #, json
+import os
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
-from flask import Flask, flash, jsonify, render_template, request, redirect #, session
+from flask import Flask, flash, render_template, request, redirect, session, url_for
 # from flask_caching import Cache
-# from flask_session import Session
+from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
+from spotipy.cache_handler import FlaskSessionCacheHandler
 
 
 # Load environment variables
 load_dotenv()
 
-# Configure simple caching
-# config = {
-#     'DEBUG': True,
-#     'CACHE_TYPE': 'SimpleCache',
-#     'CACHE_DEFAULT_TIMEOUT': 300
-# }
-
 # Application configurations
 app = Flask(__name__)
 # app.config.from_mapping(config)
 app.secret_key = os.getenv('SECRET_KEY')
+app.config['SESSION_TYPE'] = 'filesystem'
 # cache = Cache(app)
-# Session(app)
+Session(app)
 
 # Constants
-OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize?'
-OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token/'
+OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
+OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
@@ -46,42 +41,16 @@ params = {
             'show_dialog': True
         }
 
-oauth = SpotifyOAuth(
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    redirect_uri=REDIRECT_URI,
-    state=STATE,
-    scope=SCOPE,
-    show_dialog=True
-)
+# oauth = SpotifyOAuth(
+#     client_id=CLIENT_ID,
+#     client_secret=CLIENT_SECRET,
+#     redirect_uri=REDIRECT_URI,
+#     state=STATE,
+#     scope=SCOPE,
+#     show_dialog=True
+# )
 
-sp = Spotify(auth_manager=oauth)
-
-
-# GET ACCESS TOKEN FOR SPOTIFY
-@app.route('/playlister/get_spotify_token', methods=['GET', 'POST'])
-def get_spotify_token():
-    client_id = CLIENT_ID
-    client_secret = CLIENT_SECRET
-
-    auth_headers = {
-        'Authorization': 'Basic ' + base64.b64encode((client_id + ':' + client_secret).encode('utf-8')).decode('utf-8')
-    }
-
-    auth_data = {
-        'grant_type': 'client_credentials',
-    }
-
-    auth_url = OAUTH_TOKEN_URL
-
-    res = requests.post(auth_url, headers=auth_headers, data=auth_data)
-
-    if res.status_code == 200:
-        body = res.json()
-        access_token = body['access_token']
-        return access_token
-    else:
-        return jsonify({'error': 'Failed to get Spotify token'}), res.status_code
+# sp = Spotify(auth_manager=oauth)
     
 
 # PORTFOLIO ROUTES
@@ -105,30 +74,78 @@ def home():
 def playlister_index():
     ''' Playlister app landing page. '''
 
-    # Authorize user?
-    # get_spotify_token()
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's access token
+    if request.args.get('code'):
+        # Step 2. Being redirected from Spotify auth page
+        auth_manager.get_access_token(request.args.get('code'))
+        return redirect('/playlister/index')
+    # Validate user's access token
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign in link when no token
+        auth_url = auth_manager.get_authorize_url()
+        # return f'<h2><a href="{auth_url}">Sign in</a></h2>'
+        return render_template('playlister/sign_in.html', auth_url=auth_url)
+    
+    # Step 3. Signed in, display data
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
 
     # Get user profile information to display username
     user = sp.current_user()
 
     # Username
-    username = user['display_name']
+    if not user['display_name']:
+        username = 'User'
+    else:
+        username = user['display_name']
 
-    # PFPs
-    sm_image = user['images'][0]['url']
-    # lg_image = user['images'][1]['url']
+    # User profile picture
+    if not user['images']:
+        sm_image = url_for('static', filename='playlister/images/pfp.png')
+    else:
+        sm_image = user['images'][0]['url']
 
     # Get user playlists
     playlists = sp.current_user_playlists() # limit 50...
-    # CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
+    #NOTE CREATE LOOP TO GET THROUGH ALL PLAYLISTS IF OVER 50
 
     return render_template('playlister/index.html', playlists=playlists, username=username, sm_image=sm_image)
+
+
+# Sign out link
+@app.route('/playlister/sign_out')
+def sign_out():
+    session.pop("token_info", None)
+    return redirect('/playlister/index')
 
 
 # Playlists page
 @app.route('/playlister/<playlist>:<id>')
 def playlister_playlist(playlist, id):
     ''' Takes a playlist the user selects and renders it on its own page. '''
+
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -197,6 +214,21 @@ def playlister_playlist(playlist, id):
 def delete_playlist(id):
     ''' Delete a playlist from a user's profile. '''
 
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
+
     sp.current_user_unfollow_playlist(playlist_id=id)
 
     return redirect('/playlister/index')
@@ -206,6 +238,21 @@ def delete_playlist(id):
 @app.route('/playlister/create_playlist', methods=['GET', 'POST'])
 def create_playlist():
     ''' Create new playlist to save to user profile. '''
+
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -244,6 +291,21 @@ def create_playlist():
 @app.route('/playlister/edit/<playlist>:<id>', methods=['GET', 'POST'])
 def edit_playlist(playlist, id):
     ''' Allow user to edit selected playlist. '''
+
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
 
     # Get user profile information to display username
     user = sp.current_user()
@@ -331,7 +393,22 @@ def edit_playlist(playlist, id):
 def playlister_search(id):
     ''' Let user search for artists, albums, songs, episodes, or playlists and add them to their library. '''
 
-    # Call in template to get songs for each album
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
+
+    # Function to get songs for each album
     def get_album(id):
         ''' Return songs of an album. '''
 
@@ -346,6 +423,33 @@ def playlister_search(id):
             }
             all_songs.append(song)
         return all_songs
+    
+    # Function to create data for HTML template
+    def prepare_search_data(sorted_albums):
+        search_data = []
+
+        for album in sorted_albums:
+            album_data = {
+                'album_name': album['album_name'],
+                'album_id': album['album_id'],
+                'album_cover_image': album['album_cover_image'],
+                'album_type': album['album_type'],
+                'total_tracks': album['total_tracks'],
+                'songs': []
+            }
+
+            # if album['album_type'] == 'album' or album['total_tracks'] > 1:
+            for song in get_album(album['album_id']):
+                song_data = {
+                    'song_image': song['song_image'],
+                    'song_name': song['song_name'],
+                    'song_id': song['song_id']
+                }
+                album_data['songs'].append(song_data)
+
+            search_data.append(album_data)
+    
+        return search_data
 
     # Get id for flask error messaging redirection
     playlist_id = id
@@ -379,7 +483,7 @@ def playlister_search(id):
     
     # Empty list to send to template
     sorted_albums = []
-
+    
     if request.method == 'POST':
         # Takes search query from user in search bar
         query = request.form.get('search_bar').strip()
@@ -393,14 +497,15 @@ def playlister_search(id):
             # If the search result name and user query match, continues
             if artist_name == query.lower():
                 # Empty list to append album details to
+                limit = 50
                 offset = 0
                 all_artist_albums = []
                 # Loop over details of artist albums to generate new list to use in search.html
                 while True:
                     # Using user's query, return a list of the artist's albums
-                    artist_albums = sp.search(q=query, type='album', offset=offset)
+                    artist_albums = sp.search(q=query, limit=limit, offset=offset, type='album')
                     albums = artist_albums['albums']['items']
-                    
+
                     if not albums:
                         break # If nothing returned
 
@@ -423,6 +528,8 @@ def playlister_search(id):
                     # Increase offset of spotipy's 'search' function to iterate over all of artist's albums
                     offset += len(albums)
                     if offset == 1000: # app breaks without this
+                        flash("ERROR: Request timed out")
+                        # return redirect(f'/playlister/search:{playlist_id}')
                         break
                 # Create new empty dictionary for sorted albums
                 album_dict = {}
@@ -451,22 +558,37 @@ def playlister_search(id):
                 sorted_albums = sorted(album_dict.values(), key=lambda x: (x['album_type'] == 'album', x['release_date'], x['album_name'], x['album_id'], x['total_tracks']), reverse=True)
             else:
                 # If artist search query is incomplete
-                flash("ERROR: Unfinished query")
-                flash("Please provide an artist's full name.")
+                flash("ERROR: Unfinished query. Please provide an artist's full name.")
                 return redirect(f'/playlister/search:{playlist_id}')
         else:
             # If user doesn't type anything
-            flash("ERROR: No input")
-            flash("Please provide an artist's full name.")
+            flash("ERROR: No input. Please provide an artist's full name.")
             return redirect(f'/playlister/search:{playlist_id}')
+        
+    search_data = prepare_search_data(sorted_albums)
 
 
-    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, sorted_albums=sorted_albums, get_album=get_album)
+    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, search_data=search_data)
 
 
 @app.route('/playlister/add_to_playlist/<playlist>:<id>')
 def add_to_playlist(playlist, id):
     ''' Add an item to a playlist. '''
+
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
 
     track = [id]
     sp.playlist_add_items(playlist_id=playlist, items=track)

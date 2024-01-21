@@ -8,16 +8,16 @@
     <section>
         <div class="container-fluid d-flex flex-column align-items-center">
             <form action="/playlister/edit/{{ name }}:{{ id }}" class="d-inline-flex flex-column justify-content-center align-items-center w-100" id="formPUT" method="POST">
-                <div class="d-inline-flex flex-column justify-content-center align-items-center w-50">
+                <div class="d-inline-flex flex-column justify-content-center align-items-center w-75">
                     <div class="d-flex my-btns">
                         <!-- MAKE CANCEL/SAVE STICK TO TOP -->
                         <a class="btn btn-outline-danger flex-fill m-3 my-btn" href="{{ url_for('playlister_playlist', playlist=name, id=id) }}">Cancel</a>
                         <button class="btn btn-outline-info flex-fill m-3 my-btn" data-bs-target="#saveModal" data-bs-toggle="modal" type="button">Save</button>
                     </div>
                     {% if has_image == False %}
-                        <img src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
+                        <img id="playlist_cover" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image">
                     {% else %}
-                        <img src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
+                        <img id="playlist_cover" src="{{ image }}" alt="Cover Image: {{ name }}">
                     {% endif %}
                     <!-- <div class="form-width m-3">
                         <label for="coverImage" class="form-label text-color">Change Image</label>
@@ -36,11 +36,11 @@
                     <hr class="my-hr">
                 </div>
                 {% if not all_tracks %}
-                    <div class="d-flex justify-content-center w-25">
-                        <a class="btn btn-light my-btns" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
+                    <div class="d-flex justify-content-center .add-to-playlist">
+                        <a class="btn btn-light" href="{{ url_for('playlister_search', id=id) }}">Add to this playlist</a>
                     </div>
                 {% else %}
-                    <div class="d-flex flex-column w-50">
+                    <div class="d-flex flex-column song-list">
                         <div class="d-flex flex-row my-4">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="selectAll">

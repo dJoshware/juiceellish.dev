@@ -24,6 +24,8 @@
 
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Custom canvas JS -->
+    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/4390.png') }}">
@@ -32,7 +34,15 @@
 </head>
 
 <body>
-    {% block main %}{% endblock %}
+
+    <main class="container-fluid text-center">
+        {% block main %}{% endblock %}
+    </main>
+
+    <footer>
+
+    </footer>
+    
 </body>
 
 </html>

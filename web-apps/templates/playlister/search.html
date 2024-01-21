@@ -9,11 +9,11 @@
         <div class="container-fluid d-flex flex-column align-items-center">
             <form action="/playlister/search:{{ id }}" class="d-inline-flex flex-column justify-content-center align-items-center w-100" method="POST">
                 {% if has_image == False %}
-                    <img class="mb-5" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image" height="400" width="400">
+                    <img id="playlist_cover" class="mb-5" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}" alt="Default Cover Image">
                 {% else %}
-                    <img class="mb-5" src="{{ image }}" alt="Cover Image: {{ name }}" height="400" width="400">
+                    <img id="playlist_cover" class="mb-5" src="{{ image }}" alt="Cover Image: {{ name }}">
                 {% endif %}
-                <div class="accordion w-25 mb-3" id="mainAccordion">
+                <div class="accordion mb-3" id="mainAccordion">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button aria-controls="collapseOne" aria-expanded="false" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapseOne" type="button">
@@ -40,18 +40,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-inline-flex flex-column justify-content-center align-items-center mb-3 w-50">
+                <div class="d-inline-flex flex-column justify-content-center align-items-center mb-3 search-btn">
                     <div class="input-group m-3">
                         <span class="input-group-text material-symbols-outlined" id="basic-addon1">search</span>
-                        <input aria-describedby="basic-addon2" aria-label="Search" autocomplete="off" autofocus class="form-control" name="search_bar" type="text">
+                        <input aria-describedby="basic-addon2" aria-label="Search" autocomplete="off" class="form-control" name="search_bar" type="text">
                         <button class="btn btn-outline-info" id="button-addon2" type="submit">Search</button>
                     </div>
                 </div>
-                {% if not sorted_albums %}
-                    <div class="d-flex justify-content-center w-25"></div>
+                {% if not search_data %}
+                    <div class="d-flex justify-content-center"></div>
                 {% else %}
                     <div class="accordion mb-3" id="accordionParent">
-                        {% for album in sorted_albums %}
+                        {% for album in search_data %}
                             {% if album['album_type'] == 'album' or album['total_tracks'] > 1 %}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header d-flex flex-row">
@@ -59,32 +59,32 @@
                                         <button class="accordion-button collapsed py-0 px-2" data-bs-toggle="collapse" data-bs-target="#{{ album['album_id'] }}" aria-expanded="false" aria-controls="{{ album['album_id'] }}" name="{{ album['album_id'] }}" type="button">{{ album['album_name'] }}</button>
                                     </h2>
                                     <div class="accordion-collapse collapse" data-bs-parent="#accordionParent" id="{{ album['album_id'] }}">
-                                        <div class="accordion-body d-flex flex-column justify-content-center p-2" id="songs">
-                                            {% for song in get_album(album['album_id']) %}
+                                        <div class="accordion-body d-flex flex-column justify-content-center py-2 ps-2 pe-0" id="songs">
+                                            {% for song in album['songs'] %}
                                                 <div class="d-flex flex-row align-items-center">
                                                     <img class="d-inline p-2" src="{{ song['song_image'] }}" alt="{{ song['song_image'] }} Cover Image" height="64" width="64">
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <div class="d-block px-2">{{ song['song_name'] }}</div>
                                                     </div>
-                                                    <button class="add-btn add_to_playlist ms-auto" name="{{ id }}" type="button" value="{{ song['song_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
+                                                    <button class="add-btn ms-auto" name="{{ id }}" type="button" value="{{ song['song_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
                                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                                                         </svg>
                                                     </button>
                                                 </div>
-                                                <hr>
+                                                <hr class="me-2">
                                             {% endfor %}
                                         </div>
                                     </div>
                                 </div>
                                 <hr>
                             {% else %}
-                                {% for song in get_album(album['album_id']) %}
+                                {% for song in album['songs'] %}
                                     <div class="d-flex flex-row" id="songs">
-                                        <img class="d-inline p-2" src="{{ album['album_cover_image'] }}" alt="{{ album['album_name'] }} Album Cover">
+                                        <img class="d-inline p-2" src="{{ song['song_image'] }}" alt="{{ song['song_name'] }} Album Cover">
                                         <div class="d-flex flex-column justify-content-center">
-                                            <div class="d-block px-2">{{ album['album_name'] }}</div>
+                                            <div class="d-block px-2">{{ song['song_name'] }}</div>
                                         </div>
-                                        <button class="add-btn add_to_playlist ms-auto" name="{{ id }}" type="button" value="{{ song['song_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
+                                        <button class="add-btn ms-auto" name="{{ id }}" type="button" value="{{ song['song_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
                                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
                                             </svg>
                                         </button>

@@ -1,29 +1,34 @@
+/* Adobe fonts -> 'Cubano' & 'Bryant Web' */
 @import url("https://use.typekit.net/nbg5qht.css");
+/* Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Oswald:wght@100;200;300;400;500;600;700&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-}
-/* NEW BLUE: #00B8FC */
-/* NEW BLACK: #202124 */
+
 :root {
-    --bg-color: #212529;
-    --logo-blue: #54E1FA;
+    --bg-color: #202124;
+    --logo-blue: #00B8FC;
     --text-color: #F8F9FA;
+}
+html {
+    height: 100%;
 }
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'bryant', sans-serif;
-    font-weight: 300;
-    height: 100%;
-    letter-spacing: .08rem;
+    display: flex;
+    flex-direction: column;
+    font-family: 'bryant-web', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.05rem;
 }
 hr {
     margin: 0;
 }
 .text-color {
     color: var(--text-color);
+}
+.navbar-dark {
+    background-color: var(--bg-color) !important;
 }
 #pfp {
     border-radius: 50%;
@@ -34,13 +39,17 @@ hr {
     position: relative;
 }
 #logo_div #logo {
-    height: 100px;
+    height: 75px;
 }
 #logo_div #beta {
-    height: 0.625rem;
-    left: 13.75rem;
+    height: 0.5rem;
+    left: 10.5rem;
     position: absolute;
-    top: 4.375rem;
+    top: 3.35rem;
+}
+section,
+.btn {
+    font-weight: 500;
 }
 .btn-outline-info {
     border-color: var(--logo-blue);
@@ -53,7 +62,8 @@ hr {
 .my-hr {
     border-top: 2px solid var(--logo-blue);
     border-radius: 5px;
-    margin: .5rem;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
     opacity: 1;
 }
 .col {
@@ -64,11 +74,18 @@ hr {
     width: 18.75rem;
 }
 .my-btn {
-    width: 100px !important;
+    width: 90px !important;
 }
 .my-btns {
     margin: 1rem !important;
     width: 250px;
+}
+.add-to-playlist {
+    margin: .5rem 0;
+    width: 181px;
+}
+.song-list {
+    width: 100%;
 }
 #card {
     border: none;
@@ -124,25 +141,86 @@ hr {
 .add-btn {
     background-color: transparent;
     border: none;
-    /* color: var(--bg-color); */
+    margin: 0;
     outline: none;
+    padding: 0;
+}
+.add-btn:active {
+    opacity: .5;
+    transform: scale(.9);
+}
+.dropdown-toggle {
+    margin: 1rem;
+    text-decoration: none;
+}
+.dropdown-menu {
+    background-color: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.dropdown-item {
+    color: var(--text-color) !important;
+    margin: 0.25rem 0 !important;
+    padding: 0 !important;
+}
+.dropdown-menu:hover {
+    background-color: var(--logo-blue) !important;
+    color: var(--bg-color) !important;
+}
+.dropdown-item:hover {
+    background-color: transparent !important;
+    color: var(--bg-color) !important;
+}
+#playlist_cover {
+    height: 250px;
+    width: 250px;
+}
+#mainAccordion {
+    width: 350px;
+}
+.search-btn {
+    width: 400px;
+}
+.btn:active {
+    opacity: .5;
+    transform: scale(.9);
+}
+.bi-x:active {
+    transform: scale(.8);
+}
+.bi-x:hover {
+    cursor: pointer;
 }
 
-/* MOBILE DEFAULTS GO BELOW, EVERYTHING ELSE GOES OUTSIDE OF IT */
+/* Styles for non-mobile devices */
 @media screen and (min-width: 768px) {
     #logo_div #logo {
-        height: 150px;
+        height: 100px;
     }
     #logo_div #beta {
-        height: 1rem;
-        left: 20rem;
-        top: 6.25rem;
+        height: .7rem;
+        left: 13.5rem;
+        position: absolute;
+        top: 4.25rem;
     }
-    .modal-content {
-        background-color: var(--bg-color) !important;
-        color: var(--text-color) !important;
+    .form-width {
+        color: var(--bg-color);
+        width: 18.75rem;
     }
-    .form-check-input:checked {
-        background-color: var(--logo-blue);
+    .my-btn {
+        width: 100px !important;
+    }
+    #playlist_cover {
+        height: 400px;
+        width: 400px;
+    }
+    .song-list {
+        width: 50%;
+    }
+    #mainAccordion {
+        width: 400px;
+    }
+    .search-btn {
+        width: 500px;
     }
 }
