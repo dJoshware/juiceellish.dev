@@ -1,10 +1,12 @@
+/* Adobe fonts -> 'Cubano' & 'Bryant Web' */
 @import url("https://use.typekit.net/nbg5qht.css");
+/* Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Oswald:wght@100;200;300;400;500;600;700&display=swap');
 
-/* NEW BLUE: #00B8FC */
-/* NEW BLACK: #202124 */
+
 :root {
-    --bg-color: #212529;
-    --logo-blue: #54E1FA;
+    --bg-color: #202124;
+    --logo-blue: #00B8FC;
     --text-color: #F8F9FA;
 }
 html {
@@ -15,15 +17,18 @@ body {
     color: var(--text-color);
     display: flex;
     flex-direction: column;
-    font-family: 'bryant', sans-serif;
-    font-weight: 300;
-    letter-spacing: .08rem;
+    font-family: 'bryant-web', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.05rem;
 }
 hr {
     margin: 0;
 }
 .text-color {
     color: var(--text-color);
+}
+.navbar-dark {
+    background-color: var(--bg-color) !important;
 }
 #pfp {
     border-radius: 50%;
@@ -41,6 +46,10 @@ hr {
     left: 10.5rem;
     position: absolute;
     top: 3.35rem;
+}
+section,
+.btn {
+    font-weight: 500;
 }
 .btn-outline-info {
     border-color: var(--logo-blue);

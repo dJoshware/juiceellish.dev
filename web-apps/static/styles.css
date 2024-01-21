@@ -3,11 +3,10 @@
 /* Google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Oswald:wght@100;200;300;400;500;600;700&display=swap');
 
-/* NEW BLUE: #00B8FC */
-/* NEW BLACK: #202124 */
+
 :root {
-    --bg-color: #212529;
-    --logo-blue: #54E1FA;
+    --bg-color: #202124;
+    --logo-blue: #00B8FC;
     --text-color: #F8F9FA;
 }
 * {
