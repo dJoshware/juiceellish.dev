@@ -58,7 +58,8 @@ a {
     width: fit-content;
     z-index: 0;
 }
-.my-btn:hover {
+.my-btn:hover,
+.my-btn:active {
     color: var(--bg-color);
 }
 .my-btn.hover::after {
@@ -74,6 +75,7 @@ a {
     z-index: -1;
 }
 .my-btn.hover:hover::after,
-.my-btn.hover:focus::after {
+.my-btn.hover:focus::after,
+.my-btn.hover:active::after {
     height: 100%;
 }
