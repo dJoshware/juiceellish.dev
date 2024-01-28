@@ -5,25 +5,45 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container-fluid d-flex flex-column justify-content-center align-items-center w-75">
-        <div class="container p-4">
-            <h3 class="josefin">Portfolio under construction...</h3>
+    <div class="hero" id="hero">
+        <div class="canvas">
+            <canvas class="dynamic" style="display: block;"></canvas>
         </div>
-        <br>
-        <div class="container p-4">
-            <h3 class="oswald">Apps</h3>
-        </div>
-        <div class="card border-blue text-center" style="max-width: 18rem;">
-            <img alt="Playlister Logo" class="card-img-top" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}">
-            <div class="d-flex flex-column justify-content-center align-items-center josefin card-body bg-color">
-                <h3 class="card-title oswald">Playlister</h3>
-                <p class="card-text">Seemlessly create and edit your Spotify playlists ease!</p>
-                <a href="{{ url_for('playlister_index') }}" target="_blank">
-                    <div class="my-btn hover">
-                        Visit app
-                    </div>
-                </a>
+        <div class="heading">
+            <div class="heading1">
+                hello, I'm <span>Josh Ellis</span>
             </div>
+            <div class="heading2">
+                a self-taught, full-stack developer
+            </div>
+            <a href="#about">
+                <div class="heading-link">
+                    Explore
+                </div>
+            </a>
         </div>
     </div>
+    <nav class="nav_bar">
+        <ul class="nav_items">
+            <li class="nav_item" id="nav-home">
+                <a href="#hero">Home</a>
+            </li>
+            <li class="nav_item" id="nav-about">
+                <a href="#about">About</a>
+            </li>
+            <li class="nav_item" id="nav-projects">
+                <a href="#projects">Projects</a>
+            </li>
+            <li class="nav_item" id="nav-contact">
+                <a href="#contact">Contact</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="main-bg">
+        <canvas class="canvas2" height="1400" width="950" style="display: block;"></canvas>
+    </div>
+    <section class="about" id="about"></section>
+    <section class="projects" id="projects"></section>
+    <section class="contact" id="contact"></section>
+    <footer class="footer"></footer>
 {% endblock %}

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description"
-        content="Welcome to the juicebox! This is my portfolio and the location of the applications I've built. Make yourself at home!">
+        content="Josh Ellis | Full Stack Developer">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://www.juiceellish.dev">
@@ -25,7 +25,8 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Custom canvas JS -->
-    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='snow.js') }}"></script>
+    <script src="{{ url_for('static', filename='rain.js') }}"></script> -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/4390.png') }}">
@@ -35,13 +36,7 @@
 
 <body>
 
-    <main class="container-fluid text-center">
         {% block main %}{% endblock %}
-    </main>
-
-    <footer>
-
-    </footer>
     
 </body>
 
