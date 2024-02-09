@@ -74,11 +74,6 @@ a {
     width: 100%;
     z-index: 999;
 }
-canvas {
-    aspect-ratio: auto 1400 / 950;
-    overflow: clip;
-    overflow-clip-margin: content-box;
-}
 .canvas {
     background-color: black;
     bottom: 0;
@@ -194,7 +189,7 @@ canvas {
     }
 }
 .heading-link::after {
-    background-color: black;
+    background-color: transparent;
     bottom: -4rem;
     content: '\2193';
     font-family: 'Inconsolata', monospace;

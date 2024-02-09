@@ -63,10 +63,11 @@ $(document).ready(function() {
         return false;
     });
 
+    // Function to remove alerts
     $('.bi-x').on('click', function(e) {
         e.preventDefault();
         $(this).parent().remove();
-    })
+    });
 
     // Setup 'PUT' request for custom cover image
     // NEEDS WORK

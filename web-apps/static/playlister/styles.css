@@ -1,7 +1,7 @@
 /* Adobe fonts -> 'Cubano' & 'Bryant Web' */
 @import url("https://use.typekit.net/nbg5qht.css");
 /* Google fonts */
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Oswald:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 
 :root {
@@ -17,7 +17,7 @@ body {
     color: var(--text-color);
     display: flex;
     flex-direction: column;
-    font-family: 'bryant-web', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     letter-spacing: 0.05rem;
 }
@@ -82,7 +82,7 @@ section,
 }
 .add-to-playlist {
     margin: .5rem 0;
-    width: 181px;
+    width: fit-content;
 }
 .song-list {
     width: 100%;

@@ -25,8 +25,8 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Custom canvas JS -->
-    <!-- <script src="{{ url_for('static', filename='snow.js') }}"></script>
-    <script src="{{ url_for('static', filename='rain.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <script src="{{ url_for('static', filename='flow.js') }}"></script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/4390.png') }}">
@@ -37,7 +37,7 @@
 <body>
 
         {% block main %}{% endblock %}
-    
+
 </body>
 
 </html>

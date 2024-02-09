@@ -1,4 +1,4 @@
-import os, json
+import os
 
 from datetime import datetime as dt
 from dotenv import load_dotenv
@@ -9,7 +9,6 @@ from flask_session import Session
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import FlaskSessionCacheHandler
-import time
 
 
 # Load environment variables
@@ -463,15 +462,6 @@ def playlister_search(id):
     # Get user's selected playlist
     _playlist = sp.playlist(id)
 
-    # Playlist name
-    name = _playlist['name']
-    
-    # Playlist description
-    description = _playlist['description']
-
-    # Playlist owner
-    owner = _playlist['owner']['display_name']
-
     # Flag for playlist cover check
     has_image = True
 
@@ -524,6 +514,9 @@ def playlister_search(id):
                                 'album_type': album['album_type'],
                                 'total_tracks': album['total_tracks']
                             }
+                            # Remove unnecessary album type
+                            if 'compilation' in album_details.values():
+                                continue
                             # Append to empty list
                             all_artist_albums.append(album_details)
                     # Increase offset of spotipy's 'search' function to iterate over all of artist's albums
@@ -569,7 +562,7 @@ def playlister_search(id):
     search_data = prepare_search_data(sorted_albums)
 
 
-    return render_template('playlister/search.html', name=name, id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, description=description, owner=owner, search_data=search_data)
+    return render_template('playlister/search.html', id=id, username=username, sm_image=sm_image, image=image, has_image=has_image, search_data=search_data)
 
 
 @app.route('/playlister/add_to_playlist/<playlist>:<id>')
