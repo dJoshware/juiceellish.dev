@@ -47,10 +47,6 @@ hr {
     position: absolute;
     top: 3.35rem;
 }
-section,
-.btn {
-    font-weight: 500;
-}
 .btn-outline-info {
     border-color: var(--logo-blue);
     color: var(--text-color);
@@ -138,6 +134,7 @@ section,
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23F8F9FA'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");;
     color: var(--text-color);
 }
+.add-album-btn,
 .add-btn {
     background-color: transparent;
     border: none;
@@ -145,6 +142,7 @@ section,
     outline: none;
     padding: 0;
 }
+.add-album-btn:active,
 .add-btn:active {
     opacity: .5;
     transform: scale(.9);

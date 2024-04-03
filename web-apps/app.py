@@ -1,5 +1,4 @@
-import os
-
+import os, sys, platform
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
@@ -24,7 +23,7 @@ Session(app)
 
 # Constants
 OAUTH_AUTHORIZE_URL = 'https://accounts.spotify.com/authorize'
-OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
+# OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('REDIRECT_URI')
@@ -64,7 +63,15 @@ def home():
     # Describe backend of the site, showcase applications at top (as cards: image, title, and description), explain languages used and any respective packages/modules, hosting service(s)
     # Create backstory/personal background section
 
-    return render_template('index.html')
+    # Get current year for dynamic copyright updates
+    year = dt.today().year
+    # Get user's device name
+    device_name = platform.node()
+    # Get Python version and current date/time for About Me
+    version = platform.python_version()
+    right_now = dt.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    return render_template('index.html', year=year, device_name=device_name, version=version, right_now=right_now)
 
 
 # ----- PLAYLISTER ROUTES -----
@@ -567,7 +574,7 @@ def playlister_search(id):
 
 @app.route('/playlister/add_to_playlist/<playlist>:<id>')
 def add_to_playlist(playlist, id):
-    ''' Add an item to a playlist. '''
+    ''' Add a song to a playlist. '''
 
     # Set config for session caching and authorization
     cache_handler = FlaskSessionCacheHandler(session)
@@ -586,6 +593,35 @@ def add_to_playlist(playlist, id):
 
     track = [id]
     sp.playlist_add_items(playlist_id=playlist, items=track)
+
+    return ''
+
+
+@app.route('/playlister/add_album_to_playlist/<playlist>:<album_id>')
+def add_album_to_playlist(playlist, album_id):
+    ''' Add an album to a playlist. '''
+
+    # Set config for session caching and authorization
+    cache_handler = FlaskSessionCacheHandler(session)
+    auth_manager = SpotifyOAuth(
+        scope = SCOPE,
+        cache_handler=cache_handler,
+        redirect_uri=REDIRECT_URI,
+        show_dialog = True
+    )
+    # Get user's cached access token and validate it
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/playlister/index')
+    
+    # Create spotipy object
+    sp = Spotify(auth_manager=auth_manager)
+
+    album = sp.album(album_id=album_id)
+    all_songs = []
+    for song in album['tracks']['items']:
+        all_songs.append(song['id'])
+    
+    sp.playlist_add_items(playlist_id=playlist, items=all_songs)
 
     return ''
 

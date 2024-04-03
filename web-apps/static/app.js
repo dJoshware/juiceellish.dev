@@ -11,7 +11,8 @@ $(document).ready(function() {
     window.addEventListener('resize', function() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        init();
+        initRain();
+        initSnow();
     });
 
     class Particle {
@@ -27,10 +28,10 @@ $(document).ready(function() {
             this.angle = 0;
             this.timer = this.maxLength * 2;
             this.colors = [
-                '#FAFAFA',
-                '#C7EEFF',
-                '#00B8FC',
-                '#546373'
+                '#F0D394',
+                '#98651E',
+                '#6E4B1F',
+                '#533710'
             ];
             this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
         }
@@ -302,10 +303,93 @@ $(document).ready(function() {
         }
     }
 
+    // Function to start canvas animations upon selection
     $('.dropdown-item').click(function(e) {
         e.preventDefault();
         var selectedAnimation = $(this).attr('id');
         initAnimation(selectedAnimation);
-    })
-    
+    });
+
+    // Function to validate form submission
+    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    $('#form-submit').on('click', function(e) {
+        e.preventDefault();
+        const formName = $('.contact-form-name'),
+            formEmail = $('.contact-form-email'),
+            formMessage = $('.contact-form-message'),
+            nameValue = formName.val(),
+            emailValue = formEmail.val(),
+            messageValue = formMessage.val(),
+            errorName = $('.form-error-name'),
+            errorEmail = $('.form-error-email'),
+            errorMessage = $('.form-error-message');
+
+        let a = false,
+            b = false,
+            c = false;
+
+        if (nameValue) {
+            a = true;
+            formName.removeClass('input-error');
+            errorName.css('display', 'none');
+        } else {
+            formName.addClass('input-error');
+            errorName.css('display', 'block');
+        }
+
+        if (regex.test(emailValue)) {
+            b = true;
+            formEmail.removeClass('input-error');
+            errorEmail.css('display', 'none');
+        } else {
+            formEmail.addClass('input-error');
+            errorEmail.css('display', 'block');
+        }
+
+        if (messageValue) {
+            c = true;
+            formMessage.removeClass('input-error');
+            errorMessage.css('display', 'none');
+        } else {
+            formMessage.addClass('input-error');
+            errorMessage.css('display', 'block');
+        }
+
+        if (a && b && c) {
+            $('.contact-form').submit();
+            setTimeout(() => {
+                $('.contact-form').trigger('reset');
+            }, 1500);
+        }
+    });
+
+    // Duplicate images in carousel to create loop effect
+    $('.skills-slide').clone().appendTo('.skills');
+
+    // Default particle animation
+    $('#_default').click(function(e) {
+        e.preventDefault();
+        $('.canvas').attr('id', 'default');
+    });
+
+    // Highlight navbar sections as they're viewed
+    const navItems = $('.nav_item');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const targetId = entry.target.id;
+                const correspondingNavItem = $(`#nav-${targetId}`);
+                navItems.removeClass('nav_item_active');
+                correspondingNavItem.addClass('nav_item_active');
+            }
+        });
+    }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1
+    });
+    $('#hero, #about, #projects, #contact').each(function() {
+        observer.observe(this);
+    });
+
 });
