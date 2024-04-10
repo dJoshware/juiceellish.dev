@@ -1,4 +1,4 @@
-import os, sys, platform
+import os, platform
 from datetime import datetime as dt
 from dotenv import load_dotenv
 from playlister.helpers import generate_random_string
@@ -65,13 +65,11 @@ def home():
 
     # Get current year for dynamic copyright updates
     year = dt.today().year
-    # Get user's device name
-    device_name = platform.node()
     # Get Python version and current date/time for About Me
     version = platform.python_version()
     right_now = dt.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    return render_template('index.html', year=year, device_name=device_name, version=version, right_now=right_now)
+    return render_template('index.html', year=year, version=version, right_now=right_now)
 
 
 # ----- PLAYLISTER ROUTES -----

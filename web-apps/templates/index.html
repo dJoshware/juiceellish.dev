@@ -17,7 +17,8 @@
                 hello, i'm <span>Josh</span>
             </div>
             <div class="heading2">
-                a self-taught, full-stack developer
+                <p>a self-taught,</p>
+                <p>full-stack developer</p>
             </div>
             <div class="dropdown-center">
                 <button aria-expanded='false' class="btn dropdown-toggle" data-bs-toggle='dropdown' id="drop-btn" type="button">
@@ -67,10 +68,11 @@
                 <div class="photo">
                     <img id="photo" src="{{ url_for('static', filename='images/pfp.jpg') }}" alt="Photo of Josh">
                     <p class="about-text">
-                        user@{{ device_name }} Full-Stack-Development % python3<br>
+                        user@localhost Full-Stack-Development % python3<br>
                         Python {{ version }} ({{ right_now }}) <br>
                         Type "help", "copyright", "credits" or "license" for more information.<br>
-                        &gt;&gt;&gt;&nbsp;<span>
+                        &gt;&gt;&gt;&nbsp;
+                        <span>
                             I enjoy learning new things. More so if it closely resembles a superpower. In 2021, I realized that everything I interacted with was coded to some degree. Cars, phones, video games, modern registers, etc. The idea of creating such technology fascinated me and thus I began my development career. Over the last few years, I've acquired a plethora of understandings for many languages and technologies. From the front-end to the back-end, I'm committed to a career in software development. Other things I enjoy doing are playing golf, playing jazz guitar, and spending time with my fiancée.
                         </span>
                     </p>
@@ -79,79 +81,79 @@
             <div class="skills">
                 <div class="skills-slide">
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/css.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/css.svg') }}" alt="CSS Logo">
                         <p class="item-name">
                             CSS
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/express.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/express.svg') }}" alt="Express.js Logo">
                         <p class="item-name">
                             Express.js
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/flask.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/flask.svg') }}" alt="Flask Logo">
                         <p class="item-name">
                             Flask
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/git.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/git.svg') }}" alt="Git Logo">
                         <p class="item-name">
                             Git
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/html.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/html.svg') }}" alt="HTML Logo">
                         <p class="item-name">
                             HTML
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/js.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/js.svg') }}" alt="JavaScript Logo">
                         <p class="item-name">
                             JavaScript
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/mongodb.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/mongodb.svg') }}" alt="MongoDB Logo">
                         <p class="item-name">
                             MongoDB
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/node.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/node.svg') }}" alt="Node.js Logo">
                         <p class="item-name">
                             Node.js
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/postgresql.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/postgresql.svg') }}" alt="PostgreSQL Logo">
                         <p class="item-name">
                             PostgreSQL
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/python.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/python.svg') }}" alt="Python Logo">
                         <p class="item-name">
                             Python
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/react.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/react.svg') }}" alt="React.js Logo">
                         <p class="item-name">
                             React.js
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/sql.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/sql.svg') }}" alt="SQL Logo">
                         <p class="item-name">
                             SQL
                         </p>
                     </div>
                     <div class="skills-item">
-                        <img src="{{ url_for('static', filename='images/sqlite.svg') }}" alt="...">
+                        <img src="{{ url_for('static', filename='images/sqlite.svg') }}" alt="SQLite Logo">
                         <p class="item-name">
                             SQLite
                         </p>
@@ -168,8 +170,8 @@
             <img alt="Playlister Logo" class="card-img-top" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}">
             <div class="d-flex flex-column justify-content-center align-items-center card-body bg-color txt-color">
                 <h3 class="card-title">Playlister</h3>
-                <p class="card-text">Seemlessly create and edit your Spotify playlists ease!</p>
-                <a class="anchor" href="{{ url_for('playlister_index') }}">
+                <p class="card-text">A Python web app that uses Flask, Spotify, and JavaScript.</p>
+                <a class="anchor" href="{{ url_for('playlister_index') }}" target="_blank">
                     <div class="my-btn hover">
                         visit app
                     </div>
