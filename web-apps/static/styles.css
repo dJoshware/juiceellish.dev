@@ -363,7 +363,7 @@ body {
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 5rem;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
 }
 .skills::before,
@@ -420,10 +420,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0 auto 10rem auto;
+    margin: 0 auto 10rem;
     position: relative;
-    width: 500px;
-    /* z-index: 10; */
+    width: 80%;
 }
 .contact-text {
     font-size: 1.25rem;
@@ -435,6 +434,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 450px;
 }
 .contact input,
 .contact textarea {
@@ -444,7 +444,8 @@ body {
     border-radius: 3px;
     color: inherit;
     resize: none;
-    width: 500px;
+    /* width: 500px; */
+    width: 100%;
 }
 .contact-form-name,
 .contact-form-email {
@@ -546,7 +547,10 @@ button {
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-    
+    .contact {
+        margin: 0 auto 10rem;
+        width: 500px;
+    }
 }
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {

@@ -386,8 +386,9 @@ $(document).ready(function() {
     }, {
         root: null,
         rootMargin: '0px',
-        threshold: 1
+        threshold: .9
     });
+    
     $('#hero, #about, #projects, #contact').each(function() {
         observer.observe(this);
     });
