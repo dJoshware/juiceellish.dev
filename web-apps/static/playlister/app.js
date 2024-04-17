@@ -7,18 +7,18 @@ $(document).ready(function() {
     currentURL = window.location.href;
 
     $('#deleteButton').on('click', function(e) {
-        e.preventDefault(); // Prevent default action of link
+        e.preventDefault();
         $('#deleteModal').css('display', 'block');
     });
 
     $('#deleteModal .btn-secondary').on('click', function(e) {
-        e.preventDefault(); // Prevent default action of link
+        e.preventDefault();
         $('#deleteModal').css('display', 'none');
     });
 
     // 'selectAll' checkbox
     $('#selectAll').on('change', function(e) {
-        e.preventDefault(); // Prevent default action of link
+        e.preventDefault();
         var checkboxes = $('input[type="checkbox"]');
         checkboxes.prop('checked', $(this).prop('checked'));
         updateSelectedIds();
@@ -57,21 +57,75 @@ $(document).ready(function() {
         e.preventDefault();
         var song_id = $(this).val();
         var playlist_id = $(this).attr('name');
-        $.getJSON(`/playlister/add_to_playlist/${playlist_id}:${song_id}`, function(e) {
+        $.getJSON(`/playlister/add_to_playlist/${playlist_id}:${song_id}`, function() {
             // do nothing
         });
         return false;
     });
 
+    // Function to add albums to a playlist
+    $('.add-album-btn').on('click', function(e) {
+        e.preventDefault();
+        var album_id = $(this).val();
+        var playlist_id = $(this).attr('name');
+        $.getJSON(`/playlister/add_album_to_playlist/${playlist_id}:${album_id}`, function() {
+            // do nothing
+        });
+        return false;
+    });
+
+    // Collect all album and single ids
+    var discography = [];
+
+    // $('.accordion-item').each(function() {
+    //     // Empty array to hold song ids
+    //     var songIDs = [];
+    //     // Get album id
+    //     var albumID = $(this).find('.add-album-btn').val();
+    //     // Loop over each song in an album and add to song array
+    //     $(this).find('.add-btn').each(function() {
+    //         songIDs.push($(this).val());
+    //     });
+    //     // Add song arrays to respective album id array
+    //     albumArray[albumID] = songIDs;
+    // });
+
+    // // console.log(albumArray);
+
+
+    // $('.add-album-btn').on('click', function(e) {
+    //     e.preventDefault();
+
+    //     // Empty array to hold song ids
+    //     var songIDs = [];
+    //     // Get album id
+    //     var albumID = $(this).val();
+    //     // Get playlist id
+    //     var playlistID = $(this).attr('name');
+    //     // Loop over each song in an album and add to song array
+    //     $('.accordion-item').find('.add-btn').each(function() {
+    //         songIDs.push($(this).val());
+    //     });
+    //     // Add songIDs array to albumID array
+    //     albumArray[albumID] = songIDs;
+
+    //     console.log(albumArray);
+    //     // $.getJSON(`/playlister/add_to_playlist/${playlistID}:${albumID}`, function() {
+    //         // do nothing
+    //     // });
+    //     return false;
+    // });
+
+    // Function to remove alerts
     $('.bi-x').on('click', function(e) {
         e.preventDefault();
         $(this).parent().remove();
-    })
+    });
 
     // Setup 'PUT' request for custom cover image
     // NEEDS WORK
     // $('#formPUT').on('submit', function(e) {
-    //     e.preventDefault() // Prevent default action of link
+    //     e.preventDefault();
 
     //     // Get the value of 'cover_image' input field
     //     const coverImageInput = $('input[name="cover_image"]')[0]; // Use [0] to get the DOM element

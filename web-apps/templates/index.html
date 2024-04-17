@@ -5,25 +5,296 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container-fluid d-flex flex-column justify-content-center align-items-center w-75">
-        <div class="container p-4">
-            <h3 class="josefin">Portfolio under construction...</h3>
+    <div class="hero" id="hero">
+        <!-- <div class="canvas">
+            <canvas class="dynamic" style="display: block;"></canvas>
+        </div> -->
+        <div class="canvas" id="default"></div>
+        <script src="{{ url_for('static', filename='particles/particles.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='particles/default.js') }}" type="text/javascript"></script>
+        <div class="heading">
+            <div class="heading1">
+                hello, i'm <span>Josh</span>
+            </div>
+            <div class="heading2">
+                <p>a self-taught,</p>
+                <p>full-stack developer</p>
+            </div>
+            <div class="dropdown-center" style="visibility: hidden;"> <!-- TODO -->
+                <button aria-expanded='false' class="btn dropdown-toggle" data-bs-toggle='dropdown' id="drop-btn" type="button">
+                    Particle Menu
+                </button>
+                <ul class="dropdown-menu text-center">
+                    <li><a class="dropdown-item" href="#" id="default">Default</a></li>
+                    <li><a class="dropdown-item" href="#" id="flow">Flow</a></li>
+                    <li><a class="dropdown-item" href="#" id="rain">Rain</a></li>
+                    <li><a class="dropdown-item" href="#" id="snow">Snow</a></li>
+                </ul>
+            </div>
+            <a class="anchor" href="#about">
+                <div class="heading-link">
+                    explore
+                </div>
+            </a>
         </div>
-        <br>
-        <div class="container p-4">
-            <h3 class="oswald">Apps</h3>
+    </div>
+    <nav class="nav_bar">
+        <ul class="nav_items">
+            <li class="nav_item" id="nav-hero">
+                <a class="anchor" href="#hero">Home</a>
+            </li>
+            <li class="nav_item" id="nav-about">
+                <a class="anchor" href="#about">About</a>
+            </li>
+            <li class="nav_item" id="nav-projects">
+                <a class="anchor" href="#projects">Projects</a>
+            </li>
+            <li class="nav_item" id="nav-contact">
+                <a class="anchor" href="#contact">Contact</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="main-bg">
+        <div id="bgc"></div>
+        <script src="{{ url_for('static', filename='particles/particles.js') }}" type="text/javascript"></script>
+        <script src="{{ url_for('static', filename='particles/bgc.js') }}" type="text/javascript"></script>
+    </div>
+    <section class="about" id="about">
+        <h2 class="about-heading section-heading">
+            <span class="def">def </span><span class="name">about</span><span class="para">()</span>:
+        </h2>
+        <div class="about-content">
+            <div class="about-me">
+                <div class="photo">
+                    <img id="photo" src="{{ url_for('static', filename='images/pfp.jpg') }}" alt="Photo of Josh">
+                    <p class="about-text">
+                        user@localhost Full-Stack-Development % python3<br>
+                        Python {{ version }} ({{ right_now }}) <br>
+                        Type "help", "copyright", "credits" or "license" for more information.<br>
+                        &gt;&gt;&gt;&nbsp;
+                        <span>
+                            I enjoy learning new things. More so if it closely resembles a superpower. In 2021, I realized that everything I interacted with was coded to some degree. Cars, phones, video games, modern registers, etc. The idea of creating such technology fascinated me and thus I began my development career. Over the last few years, I've acquired a plethora of understandings for many languages and technologies. From the front-end to the back-end, I'm committed to a career in software development. Other things I enjoy doing are playing golf, playing jazz guitar, and spending time with my fiancée.
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="skills">
+                <div class="skills-slide">
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/css.svg') }}" alt="CSS Logo">
+                        <p class="item-name">
+                            CSS
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/express.svg') }}" alt="Express.js Logo">
+                        <p class="item-name">
+                            Express.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/flask.svg') }}" alt="Flask Logo">
+                        <p class="item-name">
+                            Flask
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/git.svg') }}" alt="Git Logo">
+                        <p class="item-name">
+                            Git
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/html.svg') }}" alt="HTML Logo">
+                        <p class="item-name">
+                            HTML
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/js.svg') }}" alt="JavaScript Logo">
+                        <p class="item-name">
+                            JavaScript
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/mongodb.svg') }}" alt="MongoDB Logo">
+                        <p class="item-name">
+                            MongoDB
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/node.svg') }}" alt="Node.js Logo">
+                        <p class="item-name">
+                            Node.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/postgresql.svg') }}" alt="PostgreSQL Logo">
+                        <p class="item-name">
+                            PostgreSQL
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/python.svg') }}" alt="Python Logo">
+                        <p class="item-name">
+                            Python
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/react.svg') }}" alt="React.js Logo">
+                        <p class="item-name">
+                            React.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/sql.svg') }}" alt="SQL Logo">
+                        <p class="item-name">
+                            SQL
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/sqlite.svg') }}" alt="SQLite Logo">
+                        <p class="item-name">
+                            SQLite
+                        </p>
+                    </div>
+                </div>
+                <div class="skills-slide">
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/css.svg') }}" alt="CSS Logo">
+                        <p class="item-name">
+                            CSS
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/express.svg') }}" alt="Express.js Logo">
+                        <p class="item-name">
+                            Express.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/flask.svg') }}" alt="Flask Logo">
+                        <p class="item-name">
+                            Flask
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/git.svg') }}" alt="Git Logo">
+                        <p class="item-name">
+                            Git
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/html.svg') }}" alt="HTML Logo">
+                        <p class="item-name">
+                            HTML
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/js.svg') }}" alt="JavaScript Logo">
+                        <p class="item-name">
+                            JavaScript
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/mongodb.svg') }}" alt="MongoDB Logo">
+                        <p class="item-name">
+                            MongoDB
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/node.svg') }}" alt="Node.js Logo">
+                        <p class="item-name">
+                            Node.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/postgresql.svg') }}" alt="PostgreSQL Logo">
+                        <p class="item-name">
+                            PostgreSQL
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/python.svg') }}" alt="Python Logo">
+                        <p class="item-name">
+                            Python
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/react.svg') }}" alt="React.js Logo">
+                        <p class="item-name">
+                            React.js
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/sql.svg') }}" alt="SQL Logo">
+                        <p class="item-name">
+                            SQL
+                        </p>
+                    </div>
+                    <div class="skills-item">
+                        <img src="{{ url_for('static', filename='images/sqlite.svg') }}" alt="SQLite Logo">
+                        <p class="item-name">
+                            SQLite
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
+    <section class="projects" id="projects">
+        <h2 class="projects-heading section-heading">
+            <span class="def">def </span><span class="name">projects</span><span class="para">()</span>:
+        </h2>
         <div class="card border-blue text-center" style="max-width: 18rem;">
             <img alt="Playlister Logo" class="card-img-top" src="{{ url_for('static', filename='playlister/images/playlist-cover.png') }}">
-            <div class="d-flex flex-column justify-content-center align-items-center josefin card-body bg-color">
-                <h3 class="card-title oswald">Playlister</h3>
-                <p class="card-text">Seemlessly create and edit your Spotify playlists ease!</p>
-                <a href="{{ url_for('playlister_index') }}" target="_blank">
+            <div class="d-flex flex-column justify-content-center align-items-center card-body bg-color txt-color">
+                <h3 class="card-title">Playlister</h3>
+                <p class="card-text">A Python web app that uses Flask, Spotify, and JavaScript.</p>
+                <a class="anchor" href="{{ url_for('playlister_index') }}" target="_blank">
                     <div class="my-btn hover">
-                        Visit app
+                        visit app
                     </div>
                 </a>
             </div>
         </div>
-    </div>
+    </section>
+    <section class="contact" id="contact">
+        <h2 class="contact-heading section-heading">
+            <span class="def">def </span><span class="name">contact</span><span class="para">()</span>:
+        </h2>
+        <p class="contact-text">
+            feel free to message me with any questions or inqueries!
+        </p>
+        <form action="https://formspree.io/f/xeqygrqa" class="contact-form" method="POST">
+            <input class="contact-form-name" name="name" placeholder="Name" type="text">
+            <input class="contact-form-email" name="_replyto" placeholder="Email" type="email">
+            <textarea class="contact-form-message" name="message" placeholder="Message"></textarea>
+            <div class="contact-form-error-submit">
+                <div class="form-error">
+                    <div class="form-error-name">Please enter your name</div>
+                    <div class="form-error-email">Please enter a valid email</div>
+                    <div class="form-error-message">Please enter a message</div>
+                </div>
+                <button class="contact-form-submit my-btn hover" id="form-submit" type="button">
+                    submit
+                </button>
+            </div>
+        </form>
+    </section>
+    <footer class="footer">
+        <a href="#hero">
+            <div class="to-top">
+                <i class="fa-solid fa-arrow-up"></i>
+            </div>
+        </a>
+        <div class="socials">
+            <a class="anchor" href="https://github.com/juiceellish">
+                <div class="github">
+                    <i class="fa-brands fa-github"></i>
+                </div>
+            </a>
+        </div>
+        <p class="copyright">&copy;{{ year }} josh ellis</p>
+    </footer>
 {% endblock %}

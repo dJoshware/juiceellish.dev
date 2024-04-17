@@ -50,13 +50,17 @@
                 {% if not search_data %}
                     <div class="d-flex justify-content-center"></div>
                 {% else %}
-                    <div class="accordion mb-3" id="accordionParent">
+                    <div class="accordion" id="accordionParent">
                         {% for album in search_data %}
                             {% if album['album_type'] == 'album' or album['total_tracks'] > 1 %}
                                 <div class="accordion-item">
                                     <h2 class="accordion-header d-flex flex-row">
                                         <img class="d-inline p-2" src="{{ album['album_cover_image'] }}" alt="{{ album['album_name'] }} Album Cover">
                                         <button class="accordion-button collapsed py-0 px-2" data-bs-toggle="collapse" data-bs-target="#{{ album['album_id'] }}" aria-expanded="false" aria-controls="{{ album['album_id'] }}" name="{{ album['album_id'] }}" type="button">{{ album['album_name'] }}</button>
+                                        <button class="add-album-btn ms-auto" name="{{ id }}" type="button" value="{{ album['album_id'] }}"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="64" fill="#54E1FA" class="bi bi-plus-circle-fill" viewBox="-4 -4 25 25">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                                            </svg>
+                                        </button>
                                     </h2>
                                     <div class="accordion-collapse collapse" data-bs-parent="#accordionParent" id="{{ album['album_id'] }}">
                                         <div class="accordion-body d-flex flex-column justify-content-center py-2 ps-2 pe-0" id="songs">
@@ -79,7 +83,7 @@
                                 <hr>
                             {% else %}
                                 {% for song in album['songs'] %}
-                                    <div class="d-flex flex-row" id="songs">
+                                    <div class="d-flex flex-row song" id="songs">
                                         <img class="d-inline p-2" src="{{ song['song_image'] }}" alt="{{ song['song_name'] }} Album Cover">
                                         <div class="d-flex flex-column justify-content-center">
                                             <div class="d-block px-2">{{ song['song_name'] }}</div>
