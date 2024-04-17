@@ -23,6 +23,7 @@ body {
     font-family: 'Source Code Pro', monospace;
     font-weight: 400;
     min-height: 100vh;
+    /* min-width: 100%; */
     overflow-x: hidden;
 }
 .anchor {
@@ -74,7 +75,6 @@ body {
     height: 100vh;
     position: relative;
     width: 100%;
-    z-index: 1;
 }
 .canvas {
     background-color: black;
@@ -87,12 +87,12 @@ body {
     top: 0;
     width: 100%;
 }
-.dynamic {
-    height: 100%;
-    width: 100%;
-}
 #default {
-    z-index: 0;
+    height: 100%;
+    overflow: clip;
+    overflow-clip-margin: content-box;
+    width: 100%;
+    z-index: 1;
 }
 .heading {
     align-items: center;
@@ -104,12 +104,11 @@ body {
     height: auto;
     justify-self: center;
     line-height: normal;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10rem;
+    margin: 10rem auto 0;
     position: relative;
     text-align: center;
     width: fit-content;
+    z-index: 1;
 }
 .heading1,
 .heading2 {
@@ -286,7 +285,7 @@ body {
     color: var(--logo-blue);
 }
 .main-bg {
-    background-color: antiquewhite;
+    background-color: black;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -363,7 +362,7 @@ body {
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 5rem;
-    overflow-x: hidden;
+    overflow: hidden;
     position: relative;
 }
 .skills::before,
@@ -422,7 +421,6 @@ body {
     justify-content: center;
     margin: 0 auto 10rem;
     position: relative;
-    width: 80%;
 }
 .contact-text {
     font-size: 1.25rem;
@@ -434,7 +432,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 450px;
 }
 .contact input,
 .contact textarea {
@@ -545,11 +542,18 @@ button {
     margin-bottom: 30px;
 }
 
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .contact-form {
+        margin: 0 auto 10rem;
+        width: 450px;
+    }
+}
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-    .contact {
+    .contact-form {
         margin: 0 auto 10rem;
-        width: 500px;
+        width: 450px;
     }
 }
 /* Medium devices (landscape tablets, 768px and up) */
@@ -586,6 +590,10 @@ button {
     }
     .skills-item img {
         height: 100px;
+    }
+    .contact-form {
+        margin: 0 auto 10rem;
+        width: 500px;
     }
 }
 /* Large devices (laptops/desktops, 992px and up) */
